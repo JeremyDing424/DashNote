@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "DashNote",
+  "version": "1.0",
+  "description": "快速笔记侧边栏 - 随时随地记录想法",
+  "side_panel": {
+    "default_path": "sidepanel.html",
+    "openPanelOnCommand": true
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "DashNote - 打开笔记"
+  },
+  "permissions": ["sidePanel", "storage", "activeTab"],
+  "host_permissions": ["<all_urls>"],
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}
