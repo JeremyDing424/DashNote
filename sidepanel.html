@@ -230,17 +230,19 @@
     .storage-indicator-wrap {
       width: 100%;
       margin: 0;
-      padding: 16px 0;
-      background: transparent;
+      padding: 20px;
+      background: #fafafa;
+      border-top: 1px solid #e5e5e5;
+      flex-shrink: 0;
     }
 
     .storage-card {
       width: 100%;
-      min-height: 96px;
-      background: #fafafa;
-      border: 1px solid #e5e5e5;
-      border-radius: 8px;
-      padding: 16px;
+      min-height: 0;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -842,14 +844,6 @@
       border-bottom: 1px solid #eeeeee;
     }
 
-    .setting-item.storage-indicator-wrap {
-      padding: 16px 0;
-    }
-
-    .setting-item.storage-indicator-wrap.with-bottom-actions {
-      padding-bottom: 92px;
-    }
-
     .setting-label {
       font-size: 13px;
       font-weight: 700;
@@ -1213,25 +1207,25 @@
             </div>
           </div>
         </div>
-        <div class="setting-item storage-indicator-wrap" id="storageIndicatorWrap">
-          <div class="storage-card" id="storageCard">
-            <div class="storage-header">
-              <span class="storage-label">Local Sync Storage <span class="info-dot"></span></span>
-              <span class="storage-percentage" id="storagePercentText">0%</span>
+      </div>
+      <footer class="storage-indicator-wrap" id="storageIndicatorWrap">
+        <div class="storage-card" id="storageCard">
+          <div class="storage-header">
+            <span class="storage-label">Local Sync Storage <span class="info-dot"></span></span>
+            <span class="storage-percentage" id="storagePercentText">0%</span>
+          </div>
+          <div class="storage-progress">
+            <div class="storage-progress-fill" id="storageProgressFill"></div>
+          </div>
+          <div class="storage-footer">
+            <div class="storage-capacity">
+              <span id="storageUsedValue">0.00 MB</span>
+              <span class="storage-capacity-total" id="storageTotalValue">/ 0.00 MB</span>
             </div>
-            <div class="storage-progress">
-              <div class="storage-progress-fill" id="storageProgressFill"></div>
-            </div>
-            <div class="storage-footer">
-              <div class="storage-capacity">
-                <span id="storageUsedValue">0.00 MB</span>
-                <span class="storage-capacity-total" id="storageTotalValue">/ 0.00 MB</span>
-              </div>
-              <button class="storage-optimize-btn" id="btnOptimizeStorage" type="button">OPTIMIZE</button>
-            </div>
+            <button class="storage-optimize-btn" id="btnOptimizeStorage" type="button">OPTIMIZE</button>
           </div>
         </div>
-      </div>
+      </footer>
     </div>
   </div>
 
