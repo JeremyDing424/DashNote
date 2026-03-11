@@ -1,6 +1,8 @@
 // Chrome Note 侧边栏应用 - 重构版
 const STORAGE_KEY = 'dashnote_list';
 const SETTINGS_KEY = 'dashnote_settings';
+const ONE_MB = 1024 * 1024;
+const STORAGE_USAGE_WARNING_THRESHOLD = 80;
 const DEFAULT_SETTINGS = {
   dateDisplay: 'updatedAt',
   sortOrder: 'desc',
@@ -49,10 +51,13 @@ let selectedNotes = new Set();
 let currentDownloadNoteId = null;
 let settings = { ...DEFAULT_SETTINGS };
 const deleteTimers = new Map();
+let storageListenerBound = false;
 
 // 初始化应用
 async function initApp() {
   setupEventListeners();
+  bindStorageChangeListener();
+  await updateStorageIndicator();
   await loadSettings();
 
   const notes = await getNotes();
@@ -110,6 +115,11 @@ function setupEventListeners() {
     hideDownloadMenu();
   });
 
+  const btnOptimizeStorage = document.getElementById('btnOptimizeStorage');
+  if (btnOptimizeStorage) {
+    btnOptimizeStorage.addEventListener('click', optimizeStorageUsage);
+  }
+
   // 设置选项点击（事件委托）
   const settingsContent = document.querySelector('.settings-content');
   settingsContent.addEventListener('click', (event) => {
@@ -132,6 +142,15 @@ function setupEventListeners() {
   });
 }
 
+function bindStorageChangeListener() {
+  if (storageListenerBound || !chrome.storage?.onChanged) return;
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName !== 'local' || !changes) return;
+    updateStorageIndicator();
+  });
+  storageListenerBound = true;
+}
+
 // 存储操作
 async function getNotes() {
   const data = await chrome.storage.local.get(STORAGE_KEY);
@@ -140,6 +159,133 @@ async function getNotes() {
 
 async function saveNotes(notes) {
   await chrome.storage.local.set({ [STORAGE_KEY]: notes });
+}
+
+async function getStorageStats() {
+  const usedBytes = await chrome.storage.local.getBytesInUse(null);
+  const totalBytes = typeof chrome.storage?.local?.QUOTA_BYTES === 'number'
+    ? chrome.storage.local.QUOTA_BYTES
+    : 5 * ONE_MB;
+  const percentage = totalBytes > 0 ? Math.min((usedBytes / totalBytes) * 100, 100) : 0;
+
+  return { usedBytes, totalBytes, percentage };
+}
+
+function formatMb(bytes) {
+  return `${(bytes / ONE_MB).toFixed(2)} MB`;
+}
+
+async function updateStorageIndicator() {
+  const percentEl = document.getElementById('storagePercentText');
+  const progressFillEl = document.getElementById('storageProgressFill');
+  const usedValueEl = document.getElementById('storageUsedValue');
+  const totalValueEl = document.getElementById('storageTotalValue');
+  const storageCard = document.getElementById('storageCard');
+
+  if (!percentEl || !progressFillEl || !usedValueEl || !totalValueEl || !storageCard) {
+    return;
+  }
+
+  try {
+    const { usedBytes, totalBytes, percentage } = await getStorageStats();
+    const roundedPercent = Math.round(percentage);
+
+    percentEl.textContent = `${roundedPercent}%`;
+    progressFillEl.style.width = `${percentage.toFixed(2)}%`;
+    usedValueEl.textContent = formatMb(usedBytes);
+    totalValueEl.textContent = `/ ${formatMb(totalBytes)}`;
+    storageCard.classList.toggle('near-limit', percentage >= STORAGE_USAGE_WARNING_THRESHOLD);
+  } catch (error) {
+    console.warn('Failed to update storage indicator:', error);
+  }
+}
+
+function removeInvalidStateForNotes(validNoteIds) {
+  Object.keys(modeByNoteId).forEach(noteId => {
+    if (!validNoteIds.has(noteId)) {
+      delete modeByNoteId[noteId];
+    }
+  });
+
+  Object.keys(isFullscreenByNoteId).forEach(noteId => {
+    if (!validNoteIds.has(noteId)) {
+      delete isFullscreenByNoteId[noteId];
+    }
+  });
+
+  selectedNotes.forEach(noteId => {
+    if (!validNoteIds.has(noteId)) {
+      selectedNotes.delete(noteId);
+    }
+  });
+
+  if (activeNoteId && !validNoteIds.has(activeNoteId)) {
+    activeNoteId = null;
+    document.getElementById('btnNew').disabled = false;
+  }
+}
+
+async function optimizeStorageUsage() {
+  const btnOptimizeStorage = document.getElementById('btnOptimizeStorage');
+  if (!btnOptimizeStorage) return;
+
+  const originalLabel = btnOptimizeStorage.textContent;
+  btnOptimizeStorage.textContent = 'CLEANING...';
+  btnOptimizeStorage.disabled = true;
+
+  try {
+    const data = await chrome.storage.local.get(null);
+    const notes = Array.isArray(data[STORAGE_KEY]) ? data[STORAGE_KEY] : [];
+    const now = Date.now();
+
+    const compactedNotes = notes.filter(note => (note?.content || '').trim().length > 0);
+    const notesChanged = compactedNotes.length !== notes.length;
+
+    const keysToRemove = [];
+    Object.entries(data).forEach(([key, value]) => {
+      if (key === STORAGE_KEY || key === SETTINGS_KEY) return;
+
+      if (/^dashnote_(tmp|temp|cache|draft)/i.test(key)) {
+        keysToRemove.push(key);
+        return;
+      }
+
+      const expiresAt = value && typeof value === 'object' ? value.expiresAt : null;
+      if (expiresAt) {
+        const expiresAtMs = new Date(expiresAt).getTime();
+        if (!Number.isNaN(expiresAtMs) && expiresAtMs <= now) {
+          keysToRemove.push(key);
+        }
+      }
+    });
+
+    if (notesChanged) {
+      await saveNotes(compactedNotes);
+      const validNoteIds = new Set(compactedNotes.map(note => note.id));
+      removeInvalidStateForNotes(validNoteIds);
+      await loadNotesList();
+      updateSelectedCount();
+    }
+
+    if (keysToRemove.length > 0) {
+      await chrome.storage.local.remove(keysToRemove);
+    }
+
+    await updateStorageIndicator();
+
+    const cleanedCount = (notes.length - compactedNotes.length) + keysToRemove.length;
+    if (cleanedCount > 0) {
+      showToast(`Optimized ${cleanedCount} items`);
+    } else {
+      showToast('No cleanup needed');
+    }
+  } catch (error) {
+    console.error('Failed to optimize storage usage:', error);
+    showToast('Optimize failed');
+  } finally {
+    btnOptimizeStorage.textContent = originalLabel;
+    btnOptimizeStorage.disabled = false;
+  }
 }
 
 // 加载设置
@@ -820,15 +966,18 @@ async function toggleSelectMode() {
   const btnSelect = document.getElementById('btnSelect');
   const bottomActions = document.getElementById('bottomActions');
   const notesList = document.getElementById('notesList');
+  const storageIndicatorWrap = document.getElementById('storageIndicatorWrap');
 
   if (isSelectMode) {
     btnSelect.classList.add('active');
     bottomActions.classList.add('active');
     notesList.classList.add('has-bottom-actions');
+    storageIndicatorWrap?.classList.add('with-bottom-actions');
   } else {
     btnSelect.classList.remove('active');
     bottomActions.classList.remove('active');
     notesList.classList.remove('has-bottom-actions');
+    storageIndicatorWrap?.classList.remove('with-bottom-actions');
     selectedNotes.clear();
     document.getElementById('btnSelectAll').textContent = '全选';
     resetSelectedDeleteConfirm();
