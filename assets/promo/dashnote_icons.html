@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashNote Icon System | Design Spec</title>
+    <style>
+        :root {
+            --bg: #fafafa;
+            --surface: #ffffff;
+            --border: #e0e0e0;
+            --ink: #1a1a1a;
+            --text-secondary: #666;
+            --text-tertiary: #999;
+            --radius: 8px;
+            --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--ink);
+            font-family: var(--font);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            max-width: 1000px;
+            width: 100%;
+            margin-bottom: 60px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin: 0 0 8px 0;
+        }
+
+        p.subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* FEATURE: Main Grid Layout */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .icon-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            transition: border-color 0.2s ease;
+        }
+
+        .icon-card:hover {
+            border-color: var(--ink);
+        }
+
+        .icon-preview-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 32px;
+        }
+
+        /* FEATURE: Specific Sizing Displays */
+        .main-display {
+            width: 128px;
+            height: 128px;
+            background: var(--ink);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .main-display svg {
+            width: 80px;
+            height: 80px;
+        }
+
+        .scaled-versions {
+            display: flex;
+            align-items: flex-end;
+            gap: 20px;
+            padding-bottom: 4px;
+        }
+
+        .scale-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .scale-box {
+            background: var(--ink);
+            border-radius: 4px; /* Scaled radius */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scale-label {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            font-family: monospace;
+        }
+
+        /* Icon sizing logic */
+        .s48 { width: 48px; height: 48px; border-radius: 4px; }
+        .s48 svg { width: 30px; height: 30px; }
+        
+        .s32 { width: 32px; height: 32px; border-radius: 3px; }
+        .s32 svg { width: 20px; height: 20px; }
+        
+        .s16 { width: 16px; height: 16px; border-radius: 2px; }
+        .s16 svg { width: 10px; height: 10px; }
+
+        .meta {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .meta-id {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-tertiary);
+        }
+
+        .meta-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .meta-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        footer {
+            margin-top: 80px;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            text-align: center;
+            width: 100%;
+        }
+
+        /* SVG Global Styles */
+        svg {
+            fill: none;
+            stroke: var(--surface);
+            stroke-width: 2.5; /* Optimized for 128px scaling */
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        
+        /* 16px needs slightly thicker relative stroke to stay crisp */
+        .s16 svg {
+            stroke-width: 3.5;
+        }
+
+        @media (max-width: 800px) {
+            .icon-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>DashNote Iconography</h1>
+        <p class="subtitle">Visual explorations for a sidebar-integrated markdown workspace. System: Monochrome, 8px radius, Swiss geometry.</p>
+    </header>
+
+    <main class="icon-grid" id="iconContainer">
+        <!-- Icons will be injected here by JS -->
+    </main>
+
+    <footer>
+        &copy; 2024 DashNote Design Systems. High-fidelity wireframe v1.02.
+    </footer>
+
+    <script>
+        /**
+         * FEATURE: Icon Data Definitions
+         * Using SVG path strings to maintain crisp geometry across scales.
+         */
+        const icons = [
+            {
+                id: "01",
+                title: "The Ruled D",
+                desc: "A classic D letterform bisected by a single horizontal rule line, suggesting a notebook entry.",
+                svg: `<path d="M30 20 V80 H50 C70 80 80 70 80 50 C80 30 70 20 50 20 H30 Z M20 50 H85" />`
+            },
+            {
+                id: "02",
+                title: "Geometric Sheet",
+                desc: "A perfect square with horizontal rules and a minimal D identifier in the top right quadrant.",
+                svg: `<rect x="20" y="20" width="60" height="60" /><path d="M35 40 H65 M35 50 H65 M35 60 H65 M75 25 V35 H82 C85 35 85 25 82 25 H75" />`
+            },
+            {
+                id: "03",
+                title: "Vertical Stack",
+                desc: "Ultra-thin weight DN monogram stacked vertically with rule-line emphasizes.",
+                svg: `<path d="M35 25 V45 H45 C55 45 55 25 45 25 H35 M30 50 H70 M55 55 V75 L70 55 V75 M30 80 H70" />`
+            },
+            {
+                id: "04",
+                title: "Open Folio",
+                desc: "Two balanced rectangles representing an open notebook with a central N-mark.",
+                svg: `<rect x="20" y="25" width="30" height="50" /><rect x="50" y="25" width="30" height="50" /><path d="M57 40 V60 L73 40 V60" />`
+            },
+            {
+                id: "05",
+                title: "The Card Index",
+                desc: "A rounded note card representation featuring triple-line text content layout.",
+                svg: `<rect x="20" y="30" width="60" height="40" rx="4" /><path d="M35 43 H65 M35 50 H65 M35 57 H50" />`
+            },
+            {
+                id: "06",
+                title: "Abstract Lines",
+                desc: "D letterform where the curve is constructed from three distinct horizontal note lines.",
+                svg: `<path d="M30 20 V80 M30 25 H75 M30 50 H85 M30 75 H75" />`
+            },
+            {
+                id: "07",
+                title: "The Nib D",
+                desc: "Combining the sharp angle of a fountain pen nib with the negative space of a capital D.",
+                svg: `<path d="M30 80 V20 H50 C75 20 85 40 85 50 L65 70 L50 80 H30 Z M50 20 V45" />`
+            },
+            {
+                id: "08",
+                title: "Bullet Grid",
+                desc: "A 2x3 grid of modular points within a bounded workspace, suggesting structured notes.",
+                svg: `<circle cx="35" cy="35" r="3" fill="white" stroke="none"/><circle cx="65" cy="35" r="3" fill="white" stroke="none"/><circle cx="35" cy="50" r="3" fill="white" stroke="none"/><circle cx="65" cy="50" r="3" fill="white" stroke="none"/><circle cx="35" cy="65" r="3" fill="white" stroke="none"/><circle cx="65" cy="65" r="3" fill="white" stroke="none"/><rect x="20" y="20" width="60" height="60" rx="6" />`
+            },
+            {
+                id: "09",
+                title: "The Checkmark",
+                desc: "Maximum abstraction: a single rule line with a checkbox node, balanced for small sizes.",
+                svg: `<rect x="20" y="45" width="10" height="10" /><path d="M40 50 H85" />`
+            },
+            {
+                id: "10",
+                title: "The Stroke Monogram",
+                desc: "The diagonal of the letter N becomes a deliberate pen stroke / slash.",
+                svg: `<path d="M25 30 V70 M25 30 C50 30 55 50 55 50 C55 50 50 70 25 70 M65 30 V70 M65 70 L85 30 V70" />`
+            }
+        ];
+
+        /**
+         * FEATURE: Dynamic Rendering Engine
+         * Loops through the data to build the UI with pixel-perfect SVG clones.
+         */
+        const container = document.getElementById('iconContainer');
+
+        icons.forEach(icon => {
+            const card = document.createElement('div');
+            card.className = 'icon-card';
+            
+            card.innerHTML = `
+                <div class="icon-preview-row">
+                    <div class="main-display">
+                        <svg viewBox="0 0 100 100">${icon.svg}</svg>
+                    </div>
+                    <div class="scaled-versions">
+                        <div class="scale-unit">
+                            <div class="scale-box s48"><svg viewBox="0 0 100 100">${icon.svg}</svg></div>
+                            <span class="scale-label">48px</span>
+                        </div>
+                        <div class="scale-unit">
+                            <div class="scale-box s32"><svg viewBox="0 0 100 100">${icon.svg}</svg></div>
+                            <span class="scale-label">32px</span>
+                        </div>
+                        <div class="scale-unit">
+                            <div class="scale-box s16"><svg viewBox="0 0 100 100">${icon.svg}</svg></div>
+                            <span class="scale-label">16px</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="meta">
+                    <span class="meta-id">CONCEPT ${icon.id}</span>
+                    <span class="meta-title">${icon.title}</span>
+                    <p class="meta-desc">${icon.desc}</p>
+                </div>
+            `;
+            
+            container.appendChild(card);
+        });
+
+        /**
+         * FEATURE: Micro-interactions
+         * Simple hover state animation for the SVG paths
+         */
+        document.querySelectorAll('.icon-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const svgs = card.querySelectorAll('svg');
+                svgs.forEach(svg => {
+                    svg.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    svg.style.transform = 'scale(1.05)';
+                });
+            });
+            card.addEventListener('mouseleave', () => {
+                const svgs = card.querySelectorAll('svg');
+                svgs.forEach(svg => {
+                    svg.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

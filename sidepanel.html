@@ -116,6 +116,19 @@
       transform: none;
     }
 
+    .btn-icon:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      border-color: #999;
+      color: #999;
+      background: transparent;
+    }
+
+    .btn-icon:disabled:hover {
+      background: transparent;
+      color: #999;
+    }
+
     .search-container {
       max-height: 0;
       overflow: hidden;
@@ -215,7 +228,7 @@
     }
 
     .note-item {
-      padding: 18px;
+      padding: 20px 18px 18px;
       margin: 0 0 14px 0;
       background: #ffffff;
       cursor: pointer;
@@ -426,6 +439,18 @@
       background: #000000;
     }
 
+    .confirm-delete {
+      background: #ff3b30 !important;
+      color: #fff !important;
+      border-color: #ff3b30 !important;
+    }
+
+    .card-actions button.confirm-delete {
+      color: #ff3b30;
+      background: transparent !important;
+      border-color: transparent !important;
+    }
+
     .note-edit-layer {
       display: none;
       min-height: 0;
@@ -518,6 +543,27 @@
       transform: scale(1.04);
     }
 
+    #copyToast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a1a1a;
+      color: #ffffff;
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 9999;
+      white-space: nowrap;
+    }
+
+    #copyToast.show {
+      opacity: 1;
+    }
+
     .bottom-actions {
       position: fixed;
       bottom: 0;
@@ -575,6 +621,33 @@
       background: #000000;
       border-color: #000000;
       color: #ffffff;
+    }
+
+    .download-menu {
+      position: fixed;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      z-index: 500;
+      overflow: hidden;
+      display: none;
+      min-width: 160px;
+    }
+
+    .download-menu.active {
+      display: block;
+    }
+
+    .download-menu-item {
+      padding: 10px 16px;
+      font-size: 13px;
+      color: #1a1a1a;
+      cursor: pointer;
+    }
+
+    .download-menu-item:hover {
+      background: #f5f5f5;
     }
 
     .notes-list.has-bottom-actions {
@@ -945,12 +1018,12 @@
             <button class="btn-select" id="btnSelect" title="多选"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></button>
             <button class="btn-search" id="btnSearch" title="搜索笔记"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
             <button class="btn-settings" id="btnSettings" title="设置"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button>
-            <button class="btn-icon" id="btnNew" title="新建笔记"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
+            <button class="btn-icon" id="btnNew" title="New Note"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
           </div>
         </div>
         <div class="search-container" id="searchContainer">
           <div class="search-wrapper">
-            <input type="text" class="search-box" id="searchBox" placeholder="搜索笔记...">
+            <input type="text" class="search-box" id="searchBox" placeholder="Search notes...">
             <button class="btn-clear-search" id="btnClearSearch" title="关闭搜索"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
           </div>
         </div>
@@ -959,7 +1032,9 @@
       <div class="bottom-actions" id="bottomActions">
         <div class="selected-count" id="selectedCount">已选择 0 项</div>
         <div class="bottom-buttons">
+          <button class="btn-action" id="btnSelectAll">全选</button>
           <button class="btn-action" id="btnCopySelected">复制</button>
+          <button class="btn-action" id="btnDownloadSelected">Download</button>
           <button class="btn-action danger" id="btnDeleteSelected">删除</button>
         </div>
       </div>
@@ -968,20 +1043,46 @@
     <!-- 设置面板 -->
     <div class="settings-panel" id="settingsPanel">
       <div class="settings-header">
-        <div class="settings-title">设置</div>
+        <div class="settings-title" id="settingsTitle">Settings</div>
         <button class="btn-close-settings" id="btnCloseSettings"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
       </div>
       <div class="settings-content">
         <div class="setting-item">
-          <div class="setting-label">时间显示</div>
+          <div class="setting-label" id="dateDisplayLabel">Date Display</div>
           <div class="setting-options">
-            <div class="radio-option selected" data-value="updatedAt">
+            <div class="radio-option selected" data-setting="dateDisplay" data-value="updatedAt">
               <div class="radio-circle"></div>
-              <div class="radio-text">显示最近修改时间（默认）</div>
+              <div class="radio-text" id="optionTextUpdatedAt">Last Modified</div>
             </div>
-            <div class="radio-option" data-value="createdAt">
+            <div class="radio-option" data-setting="dateDisplay" data-value="createdAt">
               <div class="radio-circle"></div>
-              <div class="radio-text">显示文件创建时间</div>
+              <div class="radio-text" id="optionTextCreatedAt">Created Date</div>
+            </div>
+          </div>
+        </div>
+        <div class="setting-item">
+          <div class="setting-label" id="sortOrderLabel">Sort Order</div>
+          <div class="setting-options">
+            <div class="radio-option selected" data-setting="sortOrder" data-value="desc">
+              <div class="radio-circle"></div>
+              <div class="radio-text" id="optionTextSortDesc">Newest First</div>
+            </div>
+            <div class="radio-option" data-setting="sortOrder" data-value="asc">
+              <div class="radio-circle"></div>
+              <div class="radio-text" id="optionTextSortAsc">Oldest First</div>
+            </div>
+          </div>
+        </div>
+        <div class="setting-item">
+          <div class="setting-label" id="languageLabel">Language</div>
+          <div class="setting-options">
+            <div class="radio-option selected" data-setting="language" data-value="en">
+              <div class="radio-circle"></div>
+              <div class="radio-text">English</div>
+            </div>
+            <div class="radio-option" data-setting="language" data-value="zh">
+              <div class="radio-circle"></div>
+              <div class="radio-text">简体中文</div>
             </div>
           </div>
         </div>
@@ -991,6 +1092,12 @@
 
   <!-- 固定的收起按钮 -->
   <button class="floating-collapse-btn" id="floatingCollapseBtn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></button>
+
+  <div id="copyToast"></div>
+  <div id="downloadMenu" class="download-menu">
+    <div class="download-menu-item" data-format="md">Download as Markdown (.md)</div>
+    <div class="download-menu-item" data-format="txt">Download as Text (.txt)</div>
+  </div>
 
   <script src="markdown-converter.js"></script>
   <script src="sidepanel.js"></script>

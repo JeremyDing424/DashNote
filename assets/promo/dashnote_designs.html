@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashNote Visual Identity — Design Specs</title>
+    <style>
+        :root {
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --secondary-bg: #fafafa;
+            --border: #e0e0e0;
+            --gray-text: #666666;
+            --light-gray-text: #999999;
+            --radius: 8px;
+            --font-main: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--secondary-bg);
+            font-family: var(--font-main);
+            color: var(--black);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+
+        header {
+            width: 100%;
+            max-width: 1640px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        header h1 {
+            font-weight: 500;
+            font-size: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .design-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 800px);
+            gap: 40px;
+            justify-content: center;
+        }
+
+        .card {
+            width: 800px;
+            height: 600px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
+
+        .label {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--light-gray-text);
+            z-index: 10;
+        }
+
+        /* Common Elements */
+        .dn-logo-text {
+            font-weight: 200;
+            font-size: 120px;
+            letter-spacing: -0.05em;
+        }
+
+        /* 1. App Icon */
+        #design-1 {
+            justify-content: center;
+            align-items: center;
+        }
+        .dn-icon-frame {
+            width: 320px;
+            height: 320px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 64px;
+        }
+
+        /* 2. Hero Banner */
+        #design-2 {
+            flex-direction: column;
+            padding: 60px;
+        }
+        .hero-mockup {
+            margin-top: 40px;
+            width: 100%;
+            height: 400px;
+            border: 1px solid var(--border);
+            border-bottom: none;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            background: #fff;
+        }
+        .mock-sidebar {
+            width: 240px;
+            height: 100%;
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            background: var(--secondary-bg);
+        }
+        .mock-note {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+        }
+        .mock-note .line {
+            height: 6px;
+            background: var(--border);
+            margin-bottom: 6px;
+            border-radius: 2px;
+        }
+
+        /* 3. Markdown */
+        #design-3 {
+            background: var(--secondary-bg);
+            justify-content: center;
+            align-items: center;
+            padding: 80px;
+        }
+        .markdown-window {
+            background: white;
+            width: 100%;
+            height: 100%;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 40px;
+            font-family: var(--font-mono);
+            line-height: 1.6;
+            color: var(--gray-text);
+        }
+        .md-accent { color: var(--black); font-weight: 600; }
+
+        /* 4. Auto-save */
+        #design-4 {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .geometric-save {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin-bottom: 40px;
+        }
+        .geo-square {
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--black);
+        }
+        .geo-circle {
+            position: absolute;
+            width: 40%;
+            height: 40%;
+            border: 2px solid var(--black);
+            border-radius: 50%;
+            top: 30%;
+            left: 30%;
+        }
+
+        /* 5. App Icon Dark */
+        #design-5 {
+            background: var(--black);
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+        }
+        #design-5 .dn-icon-frame {
+            border-color: #333;
+        }
+
+        /* 6. Promo Card */
+        #design-6 {
+            padding: 100px;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+        .promo-text {
+            font-size: 72px;
+            font-weight: 200;
+            line-height: 1.1;
+            letter-spacing: -0.04em;
+        }
+
+        /* 7. Distraction-free */
+        #design-7 {
+            padding: 40px;
+        }
+        .tiny-text {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            font-size: 11px;
+            color: var(--light-gray-text);
+            max-width: 200px;
+            line-height: 1.5;
+        }
+        .cursor-blink {
+            width: 1px;
+            height: 24px;
+            background: var(--black);
+            margin: auto;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* 8. Web Store */
+        #design-8 {
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 80px;
+        }
+        .store-tagline {
+            font-size: 24px;
+            color: var(--gray-text);
+            margin-top: 10px;
+            font-weight: 300;
+        }
+
+        /* 9. Pattern */
+        #design-9 {
+            background-image: radial-gradient(var(--border) 1px, transparent 1px);
+            background-size: 32px 32px;
+            background-position: center;
+        }
+
+        /* 10. UI Comparison */
+        #design-10 {
+            padding: 60px;
+            gap: 40px;
+            align-items: center;
+            background: var(--secondary-bg);
+        }
+        .note-card {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 24px;
+            flex: 1;
+            height: 340px;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+        .note-card.expanded {
+            flex: 1.5;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        }
+        .note-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        .note-body {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-text);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border: 1px solid var(--border);
+            font-size: 10px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 1680px) {
+            .design-grid {
+                grid-template-columns: 800px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>
+            <h1>DashNote Visual Identity</h1>
+            <p style="color: var(--light-gray-text); font-size: 14px;">Design System v1.0 • Swiss Minimalist Aesthetic</p>
+        </div>
+        <div style="text-align: right">
+            <p style="font-size: 14px; font-weight: 600;">#1a1a1a #ffffff #fafafa</p>
+            <p style="color: var(--light-gray-text); font-size: 12px;">GRID 800x600px • TYPE INTER</p>
+        </div>
+    </header>
+
+    <div class="design-grid">
+
+        <!-- FEATURE: App icon — centered 'DN' monogram, thin letterforms, white background, subtle border -->
+        <div class="card" id="design-1">
+            <span class="label">01 / App Icon</span>
+            <div class="dn-icon-frame">
+                <span class="dn-logo-text">DN</span>
+            </div>
+        </div>
+
+        <!-- FEATURE: Hero banner — illustrated browser sidebar mockup with note cards, 'DashNote' wordmark -->
+        <div class="card" id="design-2">
+            <span class="label">02 / Hero Banner</span>
+            <h2 class="dn-logo-text" style="font-size: 64px;">DashNote</h2>
+            <div class="hero-mockup">
+                <div class="mock-sidebar">
+                    <div class="badge">NOTES</div>
+                    <div class="mock-note">
+                        <div class="line" style="width: 80%; background: var(--black)"></div>
+                        <div class="line" style="width: 40%"></div>
+                    </div>
+                    <div class="mock-note">
+                        <div class="line" style="width: 60%"></div>
+                        <div class="line" style="width: 90%"></div>
+                    </div>
+                    <div class="mock-note">
+                        <div class="line" style="width: 70%"></div>
+                        <div class="line" style="width: 30%"></div>
+                    </div>
+                </div>
+                <div style="flex: 1; padding: 40px; background: #fff;">
+                    <div style="width: 100%; height: 20px; background: var(--secondary-bg); border-radius: 10px; margin-bottom: 20px;"></div>
+                    <div style="width: 70%; height: 20px; background: var(--secondary-bg); border-radius: 10px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FEATURE: Feature card — 'Write in Markdown' headline, monospace code block -->
+        <div class="card" id="design-3">
+            <span class="label">03 / Markdown Support</span>
+            <div class="markdown-window">
+                <div class="badge" style="margin-bottom: 30px;">EDITOR.MD</div>
+                <p><span class="md-accent">##</span> Project Architecture</p>
+                <p><span class="md-accent">-</span> Modular components</p>
+                <p><span class="md-accent">-</span> <span class="md-accent">**</span>Stateless<span class="md-accent">**</span> logic</p>
+                <p><span class="md-accent">-</span> CSS variables</p>
+                <br>
+                <p><span class="md-accent">></span> Simplicity is the ultimate sophistication.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: Feature card — 'Auto-save' headline, minimal save icon made of geometric shapes -->
+        <div class="card" id="design-4">
+            <span class="label">04 / Feature: Persistence</span>
+            <div class="geometric-save">
+                <div class="geo-square"></div>
+                <div class="geo-circle"></div>
+            </div>
+            <h3 style="font-weight: 400; font-size: 24px; letter-spacing: 0.2em;">AUTO-SAVE</h3>
+            <p style="color: var(--light-gray-text); margin-top: 12px; font-size: 14px;">Every keystroke, secured.</p>
+        </div>
+
+        <!-- FEATURE: App icon dark — same 'DN' monogram but white on #1a1a1a background -->
+        <div class="card" id="design-5">
+            <span class="label" style="color: var(--gray-text)">05 / App Icon Dark</span>
+            <div class="dn-icon-frame">
+                <span class="dn-logo-text">DN</span>
+            </div>
+        </div>
+
+        <!-- FEATURE: Promo card — 'Your notes, always at your side' centered on white, very large light text -->
+        <div class="card" id="design-6">
+            <span class="label">06 / Promo Card</span>
+            <h2 class="promo-text">Your notes,<br>always at<br>your side.</h2>
+        </div>
+
+        <!-- FEATURE: Feature card — 'Distraction-free writing' with 95% white space, tiny text bottom-left -->
+        <div class="card" id="design-7">
+            <span class="label">07 / Minimalist Philosophy</span>
+            <div class="cursor-blink"></div>
+            <p class="tiny-text">
+                <strong>Distraction-free writing.</strong><br>
+                Removed the noise. Removed the menus. Just you and your thoughts in a 320px column.
+            </p>
+        </div>
+
+        <!-- FEATURE: Chrome Web Store banner — 'DashNote' large wordmark, tagline 'Minimal notes. Maximum focus.' -->
+        <div class="card" id="design-8">
+            <span class="label">08 / Store Header</span>
+            <h1 class="dn-logo-text">DashNote</h1>
+            <p class="store-tagline">Minimal notes. Maximum focus.</p>
+            <div style="margin-top: 40px; display: flex; gap: 10px;">
+                <div style="width: 120px; height: 32px; border: 1px solid var(--black); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">ADD TO CHROME</div>
+                <div style="width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px;">★</div>
+            </div>
+        </div>
+
+        <!-- FEATURE: Pattern background — precise dot grid pattern in #e0e0e0 on white -->
+        <div class="card" id="design-9">
+            <span class="label">09 / Brand Texture</span>
+        </div>
+
+        <!-- FEATURE: UI comparison — side-by-side two note cards: one collapsed, one expanded -->
+        <div class="card" id="design-10">
+            <span class="label">10 / UI Comparison</span>
+            <div class="note-card" id="note-collapsed">
+                <div class="note-title">Collapsed View</div>
+                <div class="note-body">Brief preview of the content...</div>
+                <div style="margin-top: 15px; font-size: 10px; color: var(--light-gray-text);">2m ago</div>
+            </div>
+            <div class="note-card expanded" id="note-expanded">
+                <div class="note-title">Expanded Detail</div>
+                <div class="note-body">
+                    A full view of the note content allowing for deep focus and editing. 
+                    <br><br>
+                    Swiss design principles focus on cleanliness, readability, and objectivity.
+                </div>
+                <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 15px; font-size: 10px; color: var(--light-gray-text); display: flex; justify-content: space-between;">
+                    <span>424 Words</span>
+                    <span>March 12, 2024</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* FEATURE: Micro-interactions to make the prototype feel alive */
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Design 10: Toggle UI expansion state
+            const collapsedNote = document.getElementById('note-collapsed');
+            const expandedNote = document.getElementById('note-expanded');
+
+            const toggleNotes = () => {
+                collapsedNote.classList.toggle('expanded');
+                expandedNote.classList.toggle('expanded');
+            };
+
+            collapsedNote.addEventListener('mouseenter', () => {
+                collapsedNote.classList.add('expanded');
+                expandedNote.classList.remove('expanded');
+            });
+
+            expandedNote.addEventListener('mouseenter', () => {
+                expandedNote.classList.add('expanded');
+                collapsedNote.classList.remove('expanded');
+            });
+
+            // Design 3: Markdown cursor effect
+            const mdWindow = document.querySelector('#design-3 .markdown-window');
+            mdWindow.addEventListener('mousemove', (e) => {
+                const rect = mdWindow.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                mdWindow.style.borderImage = `radial-gradient(circle at ${x}px ${y}px, var(--black), var(--border)) 1`;
+            });
+            mdWindow.addEventListener('mouseleave', () => {
+                mdWindow.style.borderImage = 'none';
+            });
+
+            // Design 4: Auto-save pulse
+            const saveCircle = document.querySelector('.geo-circle');
+            setInterval(() => {
+                saveCircle.style.transition = 'all 0.8s ease';
+                saveCircle.style.transform = 'scale(1.1)';
+                saveCircle.style.borderColor = '#999';
+                setTimeout(() => {
+                    saveCircle.style.transform = 'scale(1)';
+                    saveCircle.style.borderColor = '#1a1a1a';
+                }, 800);
+            }, 3000);
+
+            // Design 2: Mock sidebar interaction
+            const mockNotes = document.querySelectorAll('.mock-note');
+            mockNotes.forEach(note => {
+                note.addEventListener('mouseenter', () => {
+                    note.style.borderColor = '#1a1a1a';
+                    note.style.transform = 'translateX(5px)';
+                    note.style.transition = 'all 0.2s ease';
+                });
+                note.addEventListener('mouseleave', () => {
+                    note.style.borderColor = '#e0e0e0';
+                    note.style.transform = 'translateX(0)';
+                });
+            });
+
+            // Design 9: Pattern Shift
+            const design9 = document.getElementById('design-9');
+            design9.addEventListener('mousemove', (e) => {
+                const moveX = (e.clientX / window.innerWidth) * 20;
+                const moveY = (e.clientY / window.innerHeight) * 20;
+                design9.style.backgroundPosition = `${moveX}px ${moveY}px`;
+            });
+        });
+    </script>
+</body>
+</html>

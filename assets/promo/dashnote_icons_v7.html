@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monochrome Note: Extension Icon Set</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --text: #000000;
+            --card-bg: #f5f5f5;
+            --border: #e0e0e0;
+            --accent: #333;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* <!-- FEATURE: Navigation and Layout --> */
+        header {
+            padding: 60px 20px 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h1 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        p.subtitle {
+            font-size: 12px;
+            color: #666;
+            margin: 0;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px 100px;
+        }
+
+        /* <!-- FEATURE: 2-Column Grid Layout --> */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+
+        .icon-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .icon-card:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        /* <!-- FEATURE: Preview Size Containers --> */
+        .previews {
+            display: flex;
+            align-items: flex-end;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .preview-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preview-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #999;
+            text-transform: uppercase;
+        }
+
+        .icon-wrapper {
+            background-color: #f5f5f5; /* Light gray background to show icon boundaries */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            outline: 1px solid #e0e0e0;
+        }
+
+        .size-128 { width: 128px; height: 128px; }
+        .size-32 { width: 32px; height: 32px; }
+        .size-16 { width: 16px; height: 16px; }
+
+        .icon-wrapper svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* <!-- FEATURE: Style Labels --> */
+        .style-label {
+            text-align: center;
+        }
+
+        .style-id {
+            font-family: "SF Mono", Menlo, monospace;
+            font-size: 11px;
+            background: #000;
+            color: #fff;
+            padding: 2px 6px;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        .style-name {
+            font-size: 16px;
+            font-weight: 600;
+            display: block;
+        }
+
+        .style-desc {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+            max-width: 280px;
+        }
+
+        /* Background Toggle */
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: #000;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            border-radius: 4px;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            font-size: 10px;
+            padding: 4px 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .btn:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        .dark-mode .icon-wrapper { background-color: #333; outline-color: #444; }
+
+        @media (max-width: 768px) {
+            .icon-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>The Monochrome Note Set</h1>
+    <p class="subtitle">10 Browser Extension Icons • Pure Grayscale Constraint • 128px | 32px | 16px</p>
+</header>
+
+<main>
+    <div class="icon-grid" id="gallery">
+        <!-- Icons injected via JS for cleaner template -->
+    </div>
+</main>
+
+<div class="controls">
+    <button class="btn" onclick="toggleMode()">Toggle Preview BG</button>
+</div>
+
+<!-- <!-- FEATURE: SVG Icon Definitions --> -->
+<script>
+    const icons = [
+        {
+            id: "01",
+            name: "Minimal Outline",
+            desc: "Maximum restraint with thin hairlines and a subtle geometric fold.",
+            svg: `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="128" height="128" fill="#ffffff"/>
+                <g transform="rotate(-3 64 64)">
+                    <rect x="24" y="24" width="80" height="80" stroke="#000000" stroke-width="2"/>
+                    <path d="M84 24L104 44M104 24L84 24V44H104" stroke="#000000" stroke-width="2" fill="none"/>
+                    <line x1="36" y1="60" x2="74" y2="60" stroke="#000000" stroke-width="1"/>
+                    <line x1="36" y1="74" x2="92" y2="74" stroke="#000000" stroke-width="1"/>
+                </g>
+            </svg>`
+        },
+        {
+            id: "02",
+            name: "Solid Stamp",
+            desc: "High contrast, punchy aesthetic designed for immediate recognition.",
+            svg: `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="128" height="128" fill="#000000"/>
+                <g transform="rotate(4 64 64)">
+                    <path d="M20 20H88L108 40V108H20V20Z" fill="#ffffff"/>
+                    <path d="M88 20V40H108L88 20Z" fill="#000000"/>
+                    <rect x="35" y="60" width="58" height="6" fill="#000000"/>
+                    <rect x="35" y="75" width="40" height="6" fill="#000000"/>
+                </g>
+            </svg>`
+        },
+        {
+            id: "03",
+            name: "Newspaper",
+            desc: "Fine newsprint texture with bold editorial typography.",
+            svg: `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="128" height="128" fill="#ffffff"/>
+                <defs>
+                    <pattern id="lines" width="4" height="4" patternUnits="userSpaceOnUse">
+                        <line x1="0" y1="2" x2="4" y2="2" stroke="#ccc" stroke-width="1"/>
+                    </pattern>
+                </defs>
+                <rect x="20" y="20" width="88" height="88" stroke="#000" stroke-width="3" fill="url(#lines)"/>
+                <rect x="32" y="32" width="64" height="64" fill="#ffffff"/>
+                <text x="64" y="78" font-family="serif" font-weight="900" font-size="52" fill="#000" text-anchor="middle">DN</text>
+            </svg>`
+        },
+        {
+            id: "04",
+            name: "Blueprint",
+            desc: "Drafting-table precision with crosshairs and technical markings.",
+            svg: `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="128" height="128" fill="#111111"/>
+                <rect x="25" y="25" width="78" height="78" stroke="#666" stroke-width="1"/>
+                <path d="M20 25H30M103 25H108M25 20V30M25 103V108M103 103L108 108" stroke="#fff" stroke-width="1"/>
+                <circle cx="64" cy="64" r="3" stroke="#fff" stroke-width="1"/>
+                <line x1="64" y1="50" x2="64" y2="78" stroke="#fff" stroke-width="0.5"/>
+                <line x1="50" y1="64" x2="78" y2="64" stroke="#fff" stroke-width="0.5"/>
+                <path d="M40 85H88" stroke="#999" stroke-width="1" stroke-dasharray="2 2"/>
+                <path d="M40 82V88M88 82V88" stroke="#fff" stroke-width="1"/>
+            </svg>`
+        },
+        {
+            id: "05",
+            name: "Woodcut",
+            desc: "Hand-carved imperfections giving a tactile, organic character.",
+            svg: `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="128" height="128" fill="#f5f5f5"/>
+                <path d="M25 22C40 24 60 21 80 23C90 24 105 20 106 35C108 50 104 80 105 95C106 105 95 106 80 104C60 103 40 107 24 105C15 104 18 80 20 60C22 40 18 25 25 22Z" fill="#000"/>
+                <path d="M35 45L90 42" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+                <path d="M38 65L82 68" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+                <path d="M36 85L60 83" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+            </svg>`
+        },
+        {
+            id: "06",
+            name: "Engraving",
+            desc: "Victorian era cross-hatching for a sophisticated classic look.",
+            svg: `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="128" height="128" fill="#ffffff"/>
+                <defs>
+                    <pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                        <line x1="0" y1="0" x2="0" y2="4" stroke="#333" stroke-width="1" />
+                        <line x1="0" y1="0" x2="4" y2="0" stroke="#333" stroke-width="1" />
+                    </pattern>
+                </defs>
+                <rect x="28" y="28" width="72" height="72" fill="#000"/>
+                <rect x="24" y="24" width="72" height="72" fill="url(#hatch)" stroke="#000" stroke-width="1"/>
+                <rect x="38" y="44" width="44" height="32" fill="#fff" stroke="#000" stroke-width="1"/>
+                <line x1="44" y1="54" x2="76" y2="54" stroke="#000" stroke-width="1"/>
+                <line x1="44" y1="64" x2="70" y2="64" stroke="#000" stroke-width="1"/>
+            </svg>`
+        },
+        {
+            id: "07",
+            name: "Shadow Depth",
+            desc: "The shadow creates the form. Modern, floating, and minimal.",
+            svg: `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="128" height="128" fill="#ffffff"/>
+                <rect x="36" y="36" width="68" height="68" fill="#000000"/>
+                <rect x="24" y="24" width="68" height="68" fill="#ffffff"/>
+                <line x1="36" y1="48" x2="80" y2="48" stroke="#ccc" stroke-width="2"/>
+                <line x1="36" y1="60" x2="70" y2="60" stroke="#ccc" stroke-width="2"/>
+            </svg>`
+        },
+        {
+            id: "08",
+            name: "Inverted Fold",
+            desc: "Dark background highlights the note through negative space logic.",
+            svg: `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="128" height="128" fill="#000000"/>
+                <path d="M24 24H84L104 44V104H24V24Z" fill="#ffffff"/>
+                <path d="M84 24V44H104L84 24Z" fill="#000000"/>
+                <line x1="40" y1="64" x2="88" y2="64" stroke="#e0e0e0" stroke-width="2"/>
+                <line x1="40" y1="76" x2="80" y2="76" stroke="#e0e0e0" stroke-width="2"/>
+            </svg>`
+        },
+        {
+            id: "09",
+            name: "Typewriter",
+            desc: "Dashed cut-lines and monospace glyphs for a retro machine vibe.",
+            svg: `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="128" height="128" fill="#ffffff"/>
+                <rect x="20" y="20" width="88" height="88" stroke="#666" stroke-width="2" stroke-dasharray="6 4"/>
+                <text x="35" y="55" font-family="monospace" font-weight="700" font-size="28" fill="#000">DN_</text>
+                <line x1="35" y1="70" x2="93" y2="70" stroke="#000" stroke-width="1.5"/>
+                <line x1="35" y1="80" x2="93" y2="80" stroke="#000" stroke-width="1.5"/>
+                <line x1="35" y1="90" x2="75" y2="90" stroke="#000" stroke-width="1.5"/>
+            </svg>`
+        },
+        {
+            id: "10",
+            name: "Geometry Pure",
+            desc: "Deconstructed elements that imply a square through the corners.",
+            svg: `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="128" height="128" fill="#ffffff"/>
+                <path d="M30 45V30H45" stroke="#000" stroke-width="4"/>
+                <path d="M83 30H98V45" stroke="#000" stroke-width="4"/>
+                <path d="M98 83V98H83" stroke="#000" stroke-width="4"/>
+                <path d="M45 98H30V83" stroke="#000" stroke-width="4"/>
+                <line x1="45" y1="54" x2="83" y2="54" stroke="#000" stroke-width="2"/>
+                <line x1="45" y1="64" x2="83" y2="64" stroke="#000" stroke-width="2"/>
+                <line x1="45" y1="74" x2="83" y2="74" stroke="#000" stroke-width="2"/>
+            </svg>`
+        }
+    ];
+
+    // <!-- FEATURE: Dynamic Content Injection -->
+    const container = document.getElementById('gallery');
+    
+    icons.forEach(icon => {
+        const card = document.createElement('div');
+        card.className = 'icon-card';
+        card.innerHTML = `
+            <div class="previews">
+                <div class="preview-group">
+                    <span class="preview-label">128px</span>
+                    <div class="icon-wrapper size-128">${icon.svg}</div>
+                </div>
+                <div class="preview-group">
+                    <span class="preview-label">32px</span>
+                    <div class="icon-wrapper size-32">${icon.svg}</div>
+                </div>
+                <div class="preview-group">
+                    <span class="preview-label">16px</span>
+                    <div class="icon-wrapper size-16">${icon.svg}</div>
+                </div>
+            </div>
+            <div class="style-label">
+                <span class="style-id">${icon.id}</span>
+                <span class="style-name">${icon.name}</span>
+                <p class="style-desc">${icon.desc}</p>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+
+    // <!-- FEATURE: Interaction JS -->
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashNote Visual Identity Exploration</title>
+    <style>
+        :root {
+            --bg: #0f1115;
+            --card-bg: #1a1d23;
+            --text-main: #e2e8f0;
+            --text-dim: #94a3b8;
+            --accent: #3b82f6;
+            --border: #2d333d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.5;
+            padding: 40px 20px;
+        }
+
+        header {
+            max-width: 1000px;
+            margin: 0 auto 60px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+        }
+
+        /* FEATURE: Grid layout for the icon styles */
+        .icon-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+        }
+
+        .icon-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .icon-display {
+            display: flex;
+            align-items: flex-end;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .size-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .icon-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Actual Icons */
+        .icon-128 { width: 128px; height: 128px; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .icon-32 { width: 32px; height: 32px; border-radius: 6px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .icon-16 { width: 16px; height: 16px; border-radius: 3px; overflow: hidden; }
+
+        .style-info h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .style-info p {
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        /* FEATURE: Browser mockup preview interaction */
+        .browser-mockup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 280px;
+            background: #222;
+            border-radius: 8px;
+            border: 1px solid #444;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            z-index: 100;
+            display: none;
+        }
+
+        @media (min-width: 1400px) {
+            .browser-mockup { display: block; }
+        }
+
+        .browser-bar {
+            height: 32px;
+            background: #333;
+            border-bottom: 1px solid #444;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            gap: 8px;
+        }
+
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: #555; }
+        .url-bar {
+            height: 18px;
+            background: #1a1a1a;
+            border-radius: 4px;
+            flex-grow: 1;
+            margin: 0 10px;
+        }
+
+        .extension-zone {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-right: 4px;
+        }
+
+        .active-preview-icon {
+            width: 16px;
+            height: 16px;
+            background: #444;
+            border-radius: 2px;
+        }
+
+        footer {
+            margin-top: 80px;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 14px;
+        }
+
+        /* Utility for SVG text */
+        .svg-text {
+            user-select: none;
+            dominant-baseline: central;
+            text-anchor: middle;
+        }
+
+        @media (max-width: 768px) {
+            .icon-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>DashNote Brand Exploration</h1>
+        <p>10 distinct visual directions for the DashNote sidebar extension icon.</p>
+    </header>
+
+    <div class="browser-mockup">
+        <div class="browser-bar">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="url-bar"></div>
+            <div class="extension-zone">
+                <div class="active-preview-icon" id="previewSlot"></div>
+                <div style="width:16px; height:16px; background:#555; border-radius:2px;"></div>
+            </div>
+        </div>
+        <div style="padding:15px; font-size:11px; color:#777;">
+            Hover any style to preview in browser toolbar
+        </div>
+    </div>
+
+    <div class="icon-grid">
+        
+        <!-- FEATURE: 01. TYPOGRAPHY LOGO (Reference) -->
+        <div class="icon-card" onmouseenter="updatePreview(1)">
+            <div class="icon-display">
+                <div class="icon-container">
+                    <div class="icon-128" id="icon-01-128">
+                        <svg viewBox="0 0 128 128" width="128" height="128">
+                            <rect width="128" height="128" fill="#FFFFFF"/>
+                            <text x="64" y="68" font-family="Didot, 'Bodoni MT', 'serif'" font-size="78" font-weight="700" fill="#000" class="svg-text">DN</text>
+                        </svg>
+                    </div>
+                    <div class="size-label">128px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-32">
+                        <svg viewBox="0 0 128 128" width="32" height="32"><rect width="128" height="128" fill="#FFFFFF"/><text x="64" y="68" font-family="serif" font-size="80" font-weight="700" fill="#000" class="svg-text">DN</text></svg>
+                    </div>
+                    <div class="size-label">32px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-16">
+                        <svg viewBox="0 0 128 128" width="16" height="16"><rect width="128" height="128" fill="#FFFFFF"/><text x="64" y="68" font-family="serif" font-size="85" font-weight="700" fill="#000" class="svg-text">DN</text></svg>
+                    </div>
+                    <div class="size-label">16px</div>
+                </div>
+            </div>
+            <div class="style-info">
+                <h3>01. Typography Logo</h3>
+                <p>High-contrast display serif, editorial magazine aesthetic.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 02. WABI-SABI -->
+        <div class="icon-card" onmouseenter="updatePreview(2)">
+            <div class="icon-display">
+                <div class="icon-container">
+                    <div class="icon-128">
+                        <svg viewBox="0 0 128 128" width="128" height="128">
+                            <rect width="128" height="128" fill="#faf8f4"/>
+                            <path d="M64 20 C 30 20, 20 45, 25 70 C 30 100, 70 110, 100 90 C 115 75, 110 40, 85 25" fill="none" stroke="#222" stroke-width="6" stroke-linecap="round" opacity="0.8" />
+                            <text x="64" y="66" font-family="Georgia, serif" font-size="28" fill="#222" class="svg-text">dn</text>
+                        </svg>
+                    </div>
+                    <div class="size-label">128px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-32">
+                        <svg viewBox="0 0 128 128" width="32" height="32"><rect width="128" height="128" fill="#faf8f4"/><path d="M64 20 C 30 20, 20 45, 25 70 C 30 100, 70 110, 100 90 C 115 75, 110 40, 85 25" fill="none" stroke="#222" stroke-width="8" stroke-linecap="round"/><text x="64" y="66" font-family="serif" font-size="34" fill="#222" class="svg-text">dn</text></svg>
+                    </div>
+                    <div class="size-label">32px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-16">
+                        <svg viewBox="0 0 128 128" width="16" height="16"><rect width="128" height="128" fill="#faf8f4"/><path d="M64 20 C 30 20, 20 45, 25 70 C 30 100, 70 110, 100 90 C 115 75, 110 40, 85 25" fill="none" stroke="#222" stroke-width="12" stroke-linecap="round"/></svg>
+                    </div>
+                    <div class="size-label">16px</div>
+                </div>
+            </div>
+            <div class="style-info">
+                <h3>02. Wabi-Sabi</h3>
+                <p>Hand-brushed organic stroke, imperfect beauty, Zen minimalism.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 03. BAUHAUS GRID -->
+        <div class="icon-card" onmouseenter="updatePreview(3)">
+            <div class="icon-display">
+                <div class="icon-container">
+                    <div class="icon-128">
+                        <svg viewBox="0 0 128 128" width="128" height="128">
+                            <rect width="128" height="128" fill="#FFD600"/>
+                            <line x1="64" y1="0" x2="64" y2="128" stroke="black" stroke-width="4"/>
+                            <line x1="0" y1="64" x2="128" y2="64" stroke="black" stroke-width="4"/>
+                            <rect x="64" y="0" width="64" height="64" fill="black"/>
+                            <text x="96" y="36" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="42" fill="#FFD600" class="svg-text">D</text>
+                            <circle cx="32" cy="96" r="16" fill="#E8453C"/>
+                        </svg>
+                    </div>
+                    <div class="size-label">128px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-32">
+                        <svg viewBox="0 0 128 128" width="32" height="32"><rect width="128" height="128" fill="#FFD600"/><line x1="64" y1="0" x2="64" y2="128" stroke="black" stroke-width="8"/><line x1="0" y1="64" x2="128" y2="64" stroke="black" stroke-width="8"/><rect x="64" y="0" width="64" height="64" fill="black"/><circle cx="32" cy="96" r="20" fill="#E8453C"/></svg>
+                    </div>
+                    <div class="size-label">32px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-16">
+                        <svg viewBox="0 0 128 128" width="16" height="16"><rect width="128" height="128" fill="#FFD600"/><rect x="64" y="0" width="64" height="64" fill="black"/><circle cx="32" cy="96" r="30" fill="#E8453C"/></svg>
+                    </div>
+                    <div class="size-label">16px</div>
+                </div>
+            </div>
+            <div class="style-info">
+                <h3>03. Bauhaus Grid</h3>
+                <p>Constructivist geometry using primary colors and rigid grids.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 04. DUOTONE RISOGRAPH -->
+        <div class="icon-card" onmouseenter="updatePreview(4)">
+            <div class="icon-display">
+                <div class="icon-container">
+                    <div class="icon-128">
+                        <svg viewBox="0 0 128 128" width="128" height="128">
+                            <rect width="128" height="128" fill="#f4f1ea"/>
+                            <circle cx="58" cy="64" r="40" fill="#1B2A4A" opacity="0.8"/>
+                            <rect x="60" y="34" width="50" height="60" fill="#E8453C" opacity="0.8" transform="rotate(10 85 64)"/>
+                            <path d="M65 50 L85 50 M65 64 L85 64 M65 78 L80 78" stroke="white" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
+                        </svg>
+                    </div>
+                    <div class="size-label">128px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-32">
+                        <svg viewBox="0 0 128 128" width="32" height="32"><rect width="128" height="128" fill="#f4f1ea"/><circle cx="58" cy="64" r="45" fill="#1B2A4A" opacity="0.8"/><rect x="60" y="34" width="55" height="65" fill="#E8453C" opacity="0.8" transform="rotate(10 85 64)"/></svg>
+                    </div>
+                    <div class="size-label">32px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-16">
+                        <svg viewBox="0 0 128 128" width="16" height="16"><rect width="128" height="128" fill="#f4f1ea"/><circle cx="58" cy="64" r="50" fill="#1B2A4A"/><rect x="65" y="34" width="55" height="65" fill="#E8453C"/></svg>
+                    </div>
+                    <div class="size-label">16px</div>
+                </div>
+            </div>
+            <div class="style-info">
+                <h3>04. Duotone Risograph</h3>
+                <p>Misaligned tactile printing effect with overprint navy and red.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 05. BRUTALIST WEB -->
+        <div class="icon-card" onmouseenter="updatePreview(5)">
+            <div class="icon-display">
+                <div class="icon-container">
+                    <div class="icon-128">
+                        <svg viewBox="0 0 128 128" width="128" height="128">
+                            <rect width="128" height="128" fill="#B0A99A"/>
+                            <rect x="8" y="8" width="112" height="112" fill="none" stroke="black" stroke-width="6"/>
+                            <rect x="0" y="44" width="128" height="40" fill="black"/>
+                            <text x="64" y="66" font-family="Courier New, monospace" font-weight="bold" font-size="28" fill="white" class="svg-text">DN-v1.0</text>
+                        </svg>
+                    </div>
+                    <div class="size-label">128px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-32">
+                        <svg viewBox="0 0 128 128" width="32" height="32"><rect width="128" height="128" fill="#B0A99A"/><rect x="8" y="8" width="112" height="112" fill="none" stroke="black" stroke-width="12"/><rect x="0" y="40" width="128" height="48" fill="black"/><text x="64" y="66" font-family="monospace" font-weight="bold" font-size="40" fill="white" class="svg-text">DN</text></svg>
+                    </div>
+                    <div class="size-label">32px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-16">
+                        <svg viewBox="0 0 128 128" width="16" height="16"><rect width="128" height="128" fill="#B0A99A"/><rect x="0" y="30" width="128" height="68" fill="black"/><text x="64" y="68" font-family="monospace" font-weight="bold" font-size="50" fill="white" class="svg-text">DN</text></svg>
+                    </div>
+                    <div class="size-label">16px</div>
+                </div>
+            </div>
+            <div class="style-info">
+                <h3>05. Brutalist Web</h3>
+                <p>Raw concrete textures, thick borders, and system monospaced fonts.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 06. AURORA DARK -->
+        <div class="icon-card" onmouseenter="updatePreview(6)">
+            <div class="icon-display">
+                <div class="icon-container">
+                    <div class="icon-128">
+                        <svg viewBox="0 0 128 128" width="128" height="128">
+                            <rect width="128" height="128" fill="#090e1a"/>
+                            <defs>
+                                <radialGradient id="aurora" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stop-color="#ff0080" stop-opacity="0.6"/>
+                                    <stop offset="50%" stop-color="#7928ca" stop-opacity="0.4"/>
+                                    <stop offset="100%" stop-color="#00dfd8" stop-opacity="0"/>
+                                </radialGradient>
+                            </defs>
+                            <circle cx="80" cy="40" r="60" fill="url(#aurora)" filter="blur(10px)"/>
+                            <rect x="34" y="34" width="60" height="60" rx="8" fill="none" stroke="white" stroke-width="3"/>
+                            <path d="M44 50 H84 M44 64 H84 M44 78 H64" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="size-label">128px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-32">
+                        <svg viewBox="0 0 128 128" width="32" height="32"><rect width="128" height="128" fill="#090e1a"/><circle cx="80" cy="40" r="60" fill="#7928ca" filter="blur(20px)"/><rect x="34" y="34" width="60" height="60" rx="10" fill="none" stroke="white" stroke-width="8"/></svg>
+                    </div>
+                    <div class="size-label">32px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-16">
+                        <svg viewBox="0 0 128 128" width="16" height="16"><rect width="128" height="128" fill="#090e1a"/><circle cx="64" cy="64" r="60" fill="#00dfd8" filter="blur(10px)"/><rect x="30" y="30" width="68" height="68" rx="12" fill="white"/></svg>
+                    </div>
+                    <div class="size-label">16px</div>
+                </div>
+            </div>
+            <div class="style-info">
+                <h3>06. Aurora Dark</h3>
+                <p>Atmospheric gradients and glowing outlines on deep navy.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 07. SWISS SYSTEM -->
+        <div class="icon-card" onmouseenter="updatePreview(7)">
+            <div class="icon-display">
+                <div class="icon-container">
+                    <div class="icon-128">
+                        <svg viewBox="0 0 128 128" width="128" height="128">
+                            <rect width="128" height="128" fill="white"/>
+                            <circle cx="64" cy="64" r="48" fill="none" stroke="black" stroke-width="2"/>
+                            <text x="44" y="66" font-family="Helvetica, Arial, sans-serif" font-weight="300" font-size="48" fill="black" class="svg-text">D</text>
+                            <rect x="64" y="0" width="64" height="128" fill="white"/>
+                            <circle cx="64" cy="64" r="48" fill="none" stroke="black" stroke-width="2"/>
+                            <text x="84" y="66" font-family="Helvetica, Arial, sans-serif" font-weight="bold" font-size="48" fill="black" class="svg-text">N</text>
+                        </svg>
+                    </div>
+                    <div class="size-label">128px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-32">
+                        <svg viewBox="0 0 128 128" width="32" height="32"><rect width="128" height="128" fill="white"/><circle cx="64" cy="64" r="50" fill="none" stroke="black" stroke-width="8"/><text x="40" y="68" font-family="sans-serif" font-weight="bold" font-size="55" fill="black" class="svg-text">D</text></svg>
+                    </div>
+                    <div class="size-label">32px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-16">
+                        <svg viewBox="0 0 128 128" width="16" height="16"><rect width="128" height="128" fill="white"/><circle cx="64" cy="64" r="55" fill="black"/></svg>
+                    </div>
+                    <div class="size-label">16px</div>
+                </div>
+            </div>
+            <div class="style-info">
+                <h3>07. Swiss System</h3>
+                <p>Precise, mathematical composition using alignment and contrast.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 08. WOODBLOCK PRINT -->
+        <div class="icon-card" onmouseenter="updatePreview(8)">
+            <div class="icon-display">
+                <div class="icon-container">
+                    <div class="icon-128">
+                        <svg viewBox="0 0 128 128" width="128" height="128">
+                            <rect width="128" height="128" fill="#1a1f3c"/>
+                            <text x="64" y="74" font-family="serif" font-weight="900" font-size="100" fill="#f5f0e8" class="svg-text">D</text>
+                            <g opacity="0.2">
+                                <line x1="0" y1="20" x2="128" y2="10" stroke="#1a1f3c" stroke-width="1"/>
+                                <line x1="0" y1="40" x2="128" y2="30" stroke="#1a1f3c" stroke-width="2"/>
+                                <line x1="0" y1="80" x2="128" y2="70" stroke="#1a1f3c" stroke-width="1"/>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="size-label">128px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-32">
+                        <svg viewBox="0 0 128 128" width="32" height="32"><rect width="128" height="128" fill="#1a1f3c"/><text x="64" y="74" font-family="serif" font-weight="900" font-size="110" fill="#f5f0e8" class="svg-text">D</text></svg>
+                    </div>
+                    <div class="size-label">32px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-16">
+                        <svg viewBox="0 0 128 128" width="16" height="16"><rect width="128" height="128" fill="#1a1f3c"/><rect x="30" y="30" width="68" height="68" fill="#f5f0e8"/></svg>
+                    </div>
+                    <div class="size-label">16px</div>
+                </div>
+            </div>
+            <div class="style-info">
+                <h3>08. Woodblock Print</h3>
+                <p>Ukiyo-e inspired stamp aesthetic with indigo and ivory tones.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 09. OPTICAL ILLUSION -->
+        <div class="icon-card" onmouseenter="updatePreview(9)">
+            <div class="icon-display">
+                <div class="icon-container">
+                    <div class="icon-128">
+                        <svg viewBox="0 0 128 128" width="128" height="128">
+                            <rect width="128" height="128" fill="white"/>
+                            <circle cx="64" cy="64" r="50" fill="none" stroke="black" stroke-width="1"/>
+                            <circle cx="64" cy="64" r="45" fill="none" stroke="black" stroke-width="1"/>
+                            <circle cx="64" cy="64" r="40" fill="none" stroke="black" stroke-width="1"/>
+                            <circle cx="64" cy="64" r="35" fill="none" stroke="black" stroke-width="1"/>
+                            <circle cx="64" cy="64" r="30" fill="none" stroke="black" stroke-width="1"/>
+                            <circle cx="64" cy="64" r="25" fill="none" stroke="black" stroke-width="1"/>
+                            <circle cx="64" cy="64" r="20" fill="none" stroke="black" stroke-width="1"/>
+                            <text x="64" y="66" font-family="sans-serif" font-weight="900" font-size="40" fill="white" stroke="black" stroke-width="4" paint-order="stroke" class="svg-text">DN</text>
+                        </svg>
+                    </div>
+                    <div class="size-label">128px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-32">
+                        <svg viewBox="0 0 128 128" width="32" height="32"><rect width="128" height="128" fill="white"/><circle cx="64" cy="64" r="50" fill="none" stroke="black" stroke-width="5"/><circle cx="64" cy="64" r="35" fill="none" stroke="black" stroke-width="5"/><circle cx="64" cy="64" r="20" fill="none" stroke="black" stroke-width="5"/></svg>
+                    </div>
+                    <div class="size-label">32px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-16">
+                        <svg viewBox="0 0 128 128" width="16" height="16"><rect width="128" height="128" fill="white"/><circle cx="64" cy="64" r="40" fill="black"/></svg>
+                    </div>
+                    <div class="size-label">16px</div>
+                </div>
+            </div>
+            <div class="style-info">
+                <h3>09. Optical Illusion</h3>
+                <p>1960s Op-Art style using concentric lines to create depth.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 10. EDITORIAL MARK -->
+        <div class="icon-card" onmouseenter="updatePreview(10)">
+            <div class="icon-display">
+                <div class="icon-container">
+                    <div class="icon-128">
+                        <svg viewBox="0 0 128 128" width="128" height="128">
+                            <rect width="128" height="128" fill="white"/>
+                            <path d="M40 24 L24 24 L24 104 L40 104" fill="none" stroke="black" stroke-width="1"/>
+                            <path d="M88 24 L104 24 L104 104 L88 104" fill="none" stroke="black" stroke-width="1"/>
+                            <text x="64" y="66" font-family="serif" font-weight="200" font-size="52" fill="black" class="svg-text">D</text>
+                        </svg>
+                    </div>
+                    <div class="size-label">128px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-32">
+                        <svg viewBox="0 0 128 128" width="32" height="32"><rect width="128" height="128" fill="white"/><path d="M40 24 L24 24 L24 104 L40 104" fill="none" stroke="black" stroke-width="4"/><path d="M88 24 L104 24 L104 104 L88 104" fill="none" stroke="black" stroke-width="4"/><text x="64" y="66" font-family="serif" font-weight="900" font-size="60" fill="black" class="svg-text">D</text></svg>
+                    </div>
+                    <div class="size-label">32px</div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-16">
+                        <svg viewBox="0 0 128 128" width="16" height="16"><rect width="128" height="128" fill="white"/><path d="M40 20 L20 20 L20 108 L40 108" fill="none" stroke="black" stroke-width="12"/><path d="M88 20 L108 20 L108 108 L88 108" fill="none" stroke="black" stroke-width="12"/></svg>
+                    </div>
+                    <div class="size-label">16px</div>
+                </div>
+            </div>
+            <div class="style-info">
+                <h3>10. Editorial Mark</h3>
+                <p>Thin hairline strokes and bracketed composition. High fashion.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        DashNote Brand Concepts &copy; 2023. Built with pure SVG/CSS.
+    </footer>
+
+    <script>
+        // FEATURE: JavaScript for live browser preview interaction
+        function updatePreview(id) {
+            const previewSlot = document.getElementById('previewSlot');
+            // Find the 16px SVG within the hovered card
+            const card = document.querySelectorAll('.icon-card')[id-1];
+            const svg16 = card.querySelector('.icon-16 svg').cloneNode(true);
+            
+            previewSlot.innerHTML = '';
+            previewSlot.appendChild(svg16);
+            
+            // Minimal visual feedback on the card
+            document.querySelectorAll('.icon-card').forEach(c => c.style.opacity = "0.7");
+            card.style.opacity = "1";
+        }
+
+        // Initialize with style 01
+        window.onload = () => updatePreview(1);
+    </script>
+</body>
+</html>

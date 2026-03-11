@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashNote Icon Lab // Brand Identity Exploration</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root {
+            --bg: #0a0a0c;
+            --card-bg: #141417;
+            --text-main: #ffffff;
+            --text-dim: #88888e;
+            --accent: #6366f1;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            max-width: 1000px;
+            width: 100%;
+            margin-bottom: 4rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.5rem;
+        }
+
+        p.subtitle {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            max-width: 600px;
+        }
+
+        /* <!-- FEATURE: Responsive 2-column grid for icon comparison --> */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .icon-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .display-area {
+            display: flex;
+            align-items: flex-end;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .main-icon {
+            width: 128px;
+            height: 128px;
+            background: #1a1a1e;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .previews {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .preview-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+        }
+
+        .preview-32 { width: 32px; height: 32px; border-radius: 4px; }
+        .preview-16 { width: 16px; height: 16px; border-radius: 2px; }
+
+        .label-group {
+            border-top: 1px solid var(--border);
+            padding-top: 1.5rem;
+        }
+
+        .style-index {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent);
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .style-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ICON SPECIFIC STYLES */
+        .canvas { width: 100%; height: 100%; }
+
+        /* Sidebar Simulator Interaction */
+        .sidebar-sim {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            background: #111;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .sim-slot {
+            width: 32px;
+            height: 32px;
+            background: #222;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sim-slot.active { background: #333; box-shadow: 0 0 0 2px var(--accent); }
+
+        @media (max-width: 850px) {
+            .icon-grid { grid-template-columns: 1fr; }
+            .sidebar-sim { display: none; }
+        }
+
+        /* SVG Inner Styling for specific icons */
+        .pixelated { image-rendering: pixelated; }
+    </style>
+</head>
+<body>
+
+    <!-- FEATURE: Sidebar Simulator to test icons in a browser-like context -->
+    <div class="sidebar-sim" id="sidebarSim">
+        <div style="font-size: 10px; color: #555; font-weight: bold; margin-bottom: 5px;">TEST</div>
+        <div class="sim-slot active" id="sim-active-preview"></div>
+        <div class="sim-slot"></div>
+        <div class="sim-slot"></div>
+    </div>
+
+    <header>
+        <h1>DashNote <span style="font-weight: 300; opacity: 0.5;">Identity System</span></h1>
+        <p class="subtitle">Exploring 10 distinct visual languages for the DashNote browser extension. From tactical neumorphism to high-fashion editorial typography.</p>
+    </header>
+
+    <main class="icon-grid">
+
+        <!-- 01 GLASSMORPHISM -->
+        <section class="icon-card" data-style="Glassmorphism">
+            <div class="display-area">
+                <div class="main-icon">
+                    <svg viewBox="0 0 128 128" class="canvas">
+                        <defs>
+                            <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#818cf8" />
+                                <stop offset="100%" stop-color="#c084fc" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="40" cy="40" r="30" fill="url(#g1)" opacity="0.6" />
+                        <circle cx="88" cy="88" r="25" fill="#6366f1" opacity="0.4" />
+                        <rect x="34" y="34" width="60" height="60" rx="12" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" style="backdrop-filter: blur(8px);" />
+                        <line x1="46" y1="52" x2="82" y2="52" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.8" />
+                        <line x1="46" y1="64" x2="82" y2="64" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.8" />
+                        <line x1="46" y1="76" x2="65" y2="76" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.8" />
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-item">32px <div class="preview-32 icon-host"></div></div>
+                    <div class="preview-item">16px <div class="preview-16 icon-host"></div></div>
+                </div>
+            </div>
+            <div class="label-group">
+                <span class="style-index">01</span>
+                <h2 class="style-name">Glassmorphism</h2>
+            </div>
+        </section>
+
+        <!-- 02 NEUMORPHISM -->
+        <section class="icon-card" data-style="Neumorphism">
+            <div class="display-area">
+                <div class="main-icon" style="background: #f0f0f0;">
+                    <svg viewBox="0 0 128 128" class="canvas">
+                        <rect x="30" y="30" width="68" height="68" rx="16" fill="#f0f0f0" />
+                        <path d="M30 46 C 30 30, 30 30, 46 30 L 82 30 C 98 30, 98 30, 98 46 L 98 82 C 98 98, 98 98, 82 98 L 46 98 C 30 98, 30 98, 30 82 Z" 
+                              fill="none" stroke="white" stroke-width="1" opacity="0.5" />
+                        <!-- Soft Shadows generated by CSS-like logic in SVG -->
+                        <rect x="38" y="38" width="52" height="52" rx="10" fill="#f0f0f0" filter="url(#neu-shadow)" />
+                        <defs>
+                            <filter id="neu-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feDropShadow dx="-4" dy="-4" stdDeviation="4" flood-color="white" flood-opacity="1" />
+                                <feDropShadow dx="4" dy="4" stdDeviation="4" flood-color="#d1d1d1" flood-opacity="1" />
+                            </filter>
+                        </defs>
+                        <rect x="50" y="52" width="28" height="4" rx="2" fill="#bcbcbc" />
+                        <rect x="50" y="62" width="28" height="4" rx="2" fill="#bcbcbc" />
+                        <rect x="50" y="72" width="18" height="4" rx="2" fill="#bcbcbc" />
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-item">32px <div class="preview-32 icon-host"></div></div>
+                    <div class="preview-item">16px <div class="preview-16 icon-host"></div></div>
+                </div>
+            </div>
+            <div class="label-group">
+                <span class="style-index">02</span>
+                <h2 class="style-name">Neumorphism</h2>
+            </div>
+        </section>
+
+        <!-- 03 BOLD GEOMETRIC -->
+        <section class="icon-card" data-style="Swiss Punk">
+            <div class="display-area">
+                <div class="main-icon" style="background: #000;">
+                    <svg viewBox="0 0 128 128" class="canvas">
+                        <rect x="0" y="0" width="128" height="128" fill="black" />
+                        <path d="M30 30 H80 C100 30 110 45 110 64 C110 83 100 98 80 98 H30 V30Z" fill="white" />
+                        <rect x="30" y="44" width="80" height="8" fill="black" />
+                        <rect x="30" y="60" width="80" height="8" fill="black" />
+                        <rect x="30" y="76" width="80" height="8" fill="black" />
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-item">32px <div class="preview-32 icon-host"></div></div>
+                    <div class="preview-item">16px <div class="preview-16 icon-host"></div></div>
+                </div>
+            </div>
+            <div class="label-group">
+                <span class="style-index">03</span>
+                <h2 class="style-name">Bold Geometric</h2>
+            </div>
+        </section>
+
+        <!-- 04 GRADIENT NEON -->
+        <section class="icon-card" data-style="Neon Cyber">
+            <div class="display-area">
+                <div class="main-icon" style="background: #0d0d0d;">
+                    <svg viewBox="0 0 128 128" class="canvas">
+                        <defs>
+                            <linearGradient id="neonG" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#00f2ff" />
+                                <stop offset="100%" stop-color="#7000ff" />
+                            </linearGradient>
+                            <filter id="neonGlow">
+                                <feGaussianBlur stdDeviation="2.5" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
+                        </defs>
+                        <rect x="34" y="34" width="60" height="60" rx="4" fill="none" stroke="url(#neonG)" stroke-width="4" filter="url(#neonGlow)" />
+                        <path d="M46 50 H82 M46 64 H82 M46 78 H64" fill="none" stroke="url(#neonG)" stroke-width="4" stroke-linecap="round" filter="url(#neonGlow)" />
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-item">32px <div class="preview-32 icon-host"></div></div>
+                    <div class="preview-item">16px <div class="preview-16 icon-host"></div></div>
+                </div>
+            </div>
+            <div class="label-group">
+                <span class="style-index">04</span>
+                <h2 class="style-name">Gradient Neon</h2>
+            </div>
+        </section>
+
+        <!-- 05 PAPER TEXTURE -->
+        <section class="icon-card" data-style="Artisanal">
+            <div class="display-area">
+                <div class="main-icon" style="background: #fdf6e3;">
+                    <svg viewBox="0 0 128 128" class="canvas">
+                        <filter id='paperGrain'>
+                            <feTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch' />
+                            <feColorMatrix type="saturate" values="0"/>
+                            <feComponentTransfer>
+                                <feFuncR type="linear" slope="0.1"/>
+                                <feFuncG type="linear" slope="0.1"/>
+                                <feFuncB type="linear" slope="0.1"/>
+                            </feComponentTransfer>
+                            <feBlend in="SourceGraphic" mode="multiply"/>
+                        </filter>
+                        <rect width="128" height="128" fill="#fdf6e3" filter="url(#paperGrain)" />
+                        <!-- Hand drawn pen nib icon -->
+                        <path d="M64 40 L80 80 L64 95 L48 80 Z" fill="#2c2c2c" />
+                        <path d="M64 40 V65" stroke="#fdf6e3" stroke-width="2" />
+                        <circle cx="64" cy="70" r="2" fill="#fdf6e3" />
+                        <path d="M40 105 Q64 100 88 105" fill="none" stroke="#2c2c2c" stroke-width="3" stroke-linecap="round" />
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-item">32px <div class="preview-32 icon-host"></div></div>
+                    <div class="preview-item">16px <div class="preview-16 icon-host"></div></div>
+                </div>
+            </div>
+            <div class="label-group">
+                <span class="style-index">05</span>
+                <h2 class="style-name">Paper Texture</h2>
+            </div>
+        </section>
+
+        <!-- 06 FLAT COLORFUL -->
+        <section class="icon-card" data-style="Modern SaaS">
+            <div class="display-area">
+                <div class="main-icon" style="background: #FF6B6B;">
+                    <svg viewBox="0 0 128 128" class="canvas">
+                        <rect x="32" y="32" width="64" height="64" rx="8" fill="white" />
+                        <rect x="44" y="48" width="40" height="6" rx="1" fill="#FF6B6B" />
+                        <rect x="44" y="60" width="40" height="6" rx="1" fill="#FF6B6B" />
+                        <rect x="44" y="72" width="24" height="6" rx="1" fill="#FF6B6B" />
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-item">32px <div class="preview-32 icon-host"></div></div>
+                    <div class="preview-item">16px <div class="preview-16 icon-host"></div></div>
+                </div>
+            </div>
+            <div class="label-group">
+                <span class="style-index">06</span>
+                <h2 class="style-name">Flat Colorful</h2>
+            </div>
+        </section>
+
+        <!-- 07 DARK PREMIUM -->
+        <section class="icon-card" data-style="Editorial">
+            <div class="display-area">
+                <div class="main-icon" style="background: #000;">
+                    <svg viewBox="0 0 128 128" class="canvas">
+                        <path d="M40 34 H88 V94 H40 Z" fill="none" stroke="#c9a96e" stroke-width="1.5" />
+                        <path d="M48 34 V94 M56 34 V94" stroke="#c9a96e" stroke-width="0.5" opacity="0.5" />
+                        <path d="M80 34 V48 L84 44 L88 48 V34" fill="#c9a96e" />
+                        <text x="64" y="70" text-anchor="middle" font-family="Playfair Display" font-size="20" fill="#c9a96e">D</text>
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-item">32px <div class="preview-32 icon-host"></div></div>
+                    <div class="preview-item">16px <div class="preview-16 icon-host"></div></div>
+                </div>
+            </div>
+            <div class="label-group">
+                <span class="style-index">07</span>
+                <h2 class="style-name">Dark Premium</h2>
+            </div>
+        </section>
+
+        <!-- 08 PIXEL ART -->
+        <section class="icon-card" data-style="Retro 8-bit">
+            <div class="display-area">
+                <div class="main-icon" style="background: #222;">
+                    <!-- Simulating pixel art with a scaled SVG grid -->
+                    <svg viewBox="0 0 16 16" class="canvas pixelated">
+                        <rect x="2" y="2" width="12" height="12" fill="#fff" />
+                        <rect x="2" y="2" width="12" height="2" fill="#5c5cff" />
+                        <rect x="4" y="6" width="8" height="1" fill="#000" />
+                        <rect x="4" y="8" width="8" height="1" fill="#000" />
+                        <rect x="4" y="10" width="5" height="1" fill="#000" />
+                        <rect x="11" y="11" width="3" height="3" fill="#ff4d4d" />
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-item">32px <div class="preview-32 icon-host"></div></div>
+                    <div class="preview-item">16px <div class="preview-16 icon-host"></div></div>
+                </div>
+            </div>
+            <div class="label-group">
+                <span class="style-index">08</span>
+                <h2 class="style-name">Pixel Art</h2>
+            </div>
+        </section>
+
+        <!-- 09 ROUNDED FRIENDLY -->
+        <section class="icon-card" data-style="iOS Mint">
+            <div class="display-area">
+                <div class="main-icon">
+                    <svg viewBox="0 0 128 128" class="canvas">
+                        <defs>
+                            <linearGradient id="mintG" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#4ECDC4" />
+                                <stop offset="100%" stop-color="#55efc4" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="128" height="128" rx="28" fill="url(#mintG)" />
+                        <rect x="34" y="34" width="60" height="60" rx="14" fill="white" />
+                        <circle cx="48" cy="52" r="2.5" fill="#4ECDC4" />
+                        <circle cx="64" cy="52" r="2.5" fill="#4ECDC4" />
+                        <circle cx="80" cy="52" r="2.5" fill="#4ECDC4" />
+                        <circle cx="48" cy="64" r="2.5" fill="#4ECDC4" />
+                        <circle cx="64" cy="64" r="2.5" fill="#4ECDC4" />
+                        <circle cx="80" cy="64" r="2.5" fill="#4ECDC4" />
+                        <circle cx="48" cy="76" r="2.5" fill="#4ECDC4" />
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-item">32px <div class="preview-32 icon-host"></div></div>
+                    <div class="preview-item">16px <div class="preview-16 icon-host"></div></div>
+                </div>
+            </div>
+            <div class="label-group">
+                <span class="style-index">09</span>
+                <h2 class="style-name">Rounded Friendly</h2>
+            </div>
+        </section>
+
+        <!-- 10 TYPOGRAPHY LOGO -->
+        <section class="icon-card" data-style="Classic Type">
+            <div class="display-area">
+                <div class="main-icon" style="background: #fff;">
+                    <svg viewBox="0 0 128 128" class="canvas">
+                        <text x="50%" y="58%" text-anchor="middle" dominant-baseline="middle" 
+                              font-family="Playfair Display" font-weight="700" font-size="82" fill="#000">DN</text>
+                        <rect x="20" y="85" width="88" height="2" fill="#000" />
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-item">32px <div class="preview-32 icon-host"></div></div>
+                    <div class="preview-item">16px <div class="preview-16 icon-host"></div></div>
+                </div>
+            </div>
+            <div class="label-group">
+                <span class="style-index">10</span>
+                <h2 class="style-name">Typography Logo</h2>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        /**
+         * <!-- FEATURE: Icon Syncer -->
+         * Automatically clones the main SVG into the 32px and 16px preview slots
+         * so the designer only has to manage the main source code.
+         */
+        function syncIcons() {
+            const cards = document.querySelectorAll('.icon-card');
+            const sidebarPreview = document.getElementById('sim-active-preview');
+            
+            cards.forEach(card => {
+                const sourceSvg = card.querySelector('.main-icon svg');
+                const hosts = card.querySelectorAll('.icon-host');
+                
+                hosts.forEach(host => {
+                    const clone = sourceSvg.cloneNode(true);
+                    host.innerHTML = '';
+                    host.appendChild(clone);
+                });
+
+                // Add interaction: Click to preview in sidebar
+                card.addEventListener('click', () => {
+                    sidebarPreview.innerHTML = '';
+                    const sidebarClone = sourceSvg.cloneNode(true);
+                    sidebarPreview.appendChild(sidebarClone);
+                    
+                    // Visual feedback
+                    cards.forEach(c => c.style.borderColor = 'rgba(255,255,255,0.1)');
+                    card.style.borderColor = 'var(--accent)';
+                });
+            });
+
+            // Initial sidebar load
+            const firstSvg = cards[0].querySelector('.main-icon svg').cloneNode(true);
+            sidebarPreview.appendChild(firstSvg);
+        }
+
+        /**
+         * <!-- FEATURE: Micro-interactions -->
+         * Adding subtle entrance animations and hover behavior
+         */
+        function initInteractions() {
+            const cards = document.querySelectorAll('.icon-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        }
+
+        window.onload = () => {
+            syncIcons();
+            initInteractions();
+        };
+    </script>
+</body>
+</html>

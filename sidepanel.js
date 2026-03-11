@@ -1,6 +1,44 @@
 // Chrome Note 侧边栏应用 - 重构版
 const STORAGE_KEY = 'dashnote_list';
 const SETTINGS_KEY = 'dashnote_settings';
+const DEFAULT_SETTINGS = {
+  dateDisplay: 'updatedAt',
+  sortOrder: 'desc',
+  language: 'en'
+};
+
+const i18n = {
+  en: {
+    settingsTitle: 'Settings',
+    dateDisplayLabel: 'Date Display',
+    updatedAtOption: 'Last Modified',
+    createdAtOption: 'Created Date',
+    sortOrderLabel: 'Sort Order',
+    sortDescOption: 'Newest First',
+    sortAscOption: 'Oldest First',
+    languageLabel: 'Language',
+    newNoteTitle: 'New Note',
+    downloadSelected: 'Download',
+    searchPlaceholder: 'Search notes...',
+    emptyStateText: 'No notes yet. Click the button below to create one.',
+    emptyNewNoteButton: 'New Note'
+  },
+  zh: {
+    settingsTitle: '设置',
+    dateDisplayLabel: '时间显示',
+    updatedAtOption: '显示最近修改时间',
+    createdAtOption: '显示文件创建时间',
+    sortOrderLabel: '排序方式',
+    sortDescOption: '最新排最前',
+    sortAscOption: '最旧排最前',
+    languageLabel: 'Language / 语言',
+    newNoteTitle: '新建笔记',
+    downloadSelected: '下载',
+    searchPlaceholder: '搜索笔记...',
+    emptyStateText: '还没有笔记，点击下方按钮开始创建',
+    emptyNewNoteButton: '新建笔记'
+  }
+};
 
 // 状态管理
 let activeNoteId = null;
@@ -8,9 +46,9 @@ let modeByNoteId = {}; // 'collapsed' | 'expanded' | 'editing'
 let isFullscreenByNoteId = {};
 let isSelectMode = false;
 let selectedNotes = new Set();
-let settings = {
-  dateDisplay: 'updatedAt'
-};
+let currentDownloadNoteId = null;
+let settings = { ...DEFAULT_SETTINGS };
+const deleteTimers = new Map();
 
 // 初始化应用
 async function initApp() {
@@ -41,18 +79,56 @@ function setupEventListeners() {
   document.getElementById('btnClearSearch').addEventListener('click', closeSearch);
   document.getElementById('searchBox').addEventListener('input', handleSearch);
   document.getElementById('btnSelect').addEventListener('click', toggleSelectMode);
+  document.getElementById('btnSelectAll').addEventListener('click', toggleSelectAll);
   document.getElementById('btnCopySelected').addEventListener('click', copySelectedNotes);
+  document.getElementById('btnDownloadSelected').addEventListener('click', (event) => {
+    event.stopPropagation();
+    showDownloadMenu(null, event.currentTarget);
+  });
   document.getElementById('btnDeleteSelected').addEventListener('click', deleteSelectedNotes);
   document.getElementById('btnSettings').addEventListener('click', openSettings);
   document.getElementById('btnCloseSettings').addEventListener('click', closeSettings);
   document.getElementById('floatingCollapseBtn').addEventListener('click', collapseActiveNote);
+  document.getElementById('downloadMenu').addEventListener('click', async (event) => {
+    const item = event.target.closest('.download-menu-item');
+    if (!item) return;
+    const format = item.getAttribute('data-format');
+    if (!format) return;
 
-  // 设置选项点击
-  document.querySelectorAll('.radio-option').forEach(option => {
-    option.addEventListener('click', function() {
-      const value = this.getAttribute('data-value');
+    if (currentDownloadNoteId === null) {
+      await downloadSelectedNotes(format);
+    } else {
+      await downloadSingleNote(currentDownloadNoteId, format);
+    }
+    hideDownloadMenu();
+  });
+
+  document.addEventListener('click', (event) => {
+    if (event.target.closest('#downloadMenu')) return;
+    if (event.target.closest('[data-action="download"]')) return;
+    if (event.target.closest('#btnDownloadSelected')) return;
+    hideDownloadMenu();
+  });
+
+  // 设置选项点击（事件委托）
+  const settingsContent = document.querySelector('.settings-content');
+  settingsContent.addEventListener('click', (event) => {
+    const option = event.target.closest('.radio-option');
+    if (!option) return;
+
+    const settingKey = option.getAttribute('data-setting');
+    const value = option.getAttribute('data-value');
+    if (!settingKey || !value) return;
+
+    updateRadioSelection(settingKey, value);
+
+    if (settingKey === 'dateDisplay') {
       updateDateDisplaySetting(value);
-    });
+    } else if (settingKey === 'sortOrder') {
+      updateSortOrderSetting(value);
+    } else if (settingKey === 'language') {
+      updateLanguageSetting(value);
+    }
   });
 }
 
@@ -69,18 +145,12 @@ async function saveNotes(notes) {
 // 加载设置
 async function loadSettings() {
   const data = await chrome.storage.local.get(SETTINGS_KEY);
-  if (data[SETTINGS_KEY]) {
-    settings = data[SETTINGS_KEY];
-  }
+  settings = { ...DEFAULT_SETTINGS, ...(data[SETTINGS_KEY] || {}) };
 
-  // 同步 UI 选中状态
-  document.querySelectorAll('.radio-option').forEach(option => {
-    if (option.getAttribute('data-value') === settings.dateDisplay) {
-      option.classList.add('selected');
-    } else {
-      option.classList.remove('selected');
-    }
-  });
+  updateRadioSelection('dateDisplay', settings.dateDisplay);
+  updateRadioSelection('sortOrder', settings.sortOrder);
+  updateRadioSelection('language', settings.language);
+  applyLanguage(settings.language);
 }
 
 // 保存设置
@@ -90,17 +160,9 @@ async function saveSettings() {
 
 // 更新日期显示设置
 async function updateDateDisplaySetting(value) {
+  if (settings.dateDisplay === value) return;
   settings.dateDisplay = value;
   await saveSettings();
-
-  // 更新 UI
-  document.querySelectorAll('.radio-option').forEach(option => {
-    if (option.getAttribute('data-value') === value) {
-      option.classList.add('selected');
-    } else {
-      option.classList.remove('selected');
-    }
-  });
 
   // 重新渲染列表
   await loadNotesList();
@@ -108,25 +170,123 @@ async function updateDateDisplaySetting(value) {
 
 // PLACEHOLDER_FOR_MORE_FUNCTIONS
 
+async function updateSortOrderSetting(value) {
+  if (settings.sortOrder === value) return;
+  settings.sortOrder = value;
+  await saveSettings();
+  await loadNotesList();
+}
+
+async function updateLanguageSetting(value) {
+  if (settings.language === value) return;
+  settings.language = value;
+  await saveSettings();
+  applyLanguage(value);
+  await loadNotesList();
+}
+
+function updateRadioSelection(settingKey, value) {
+  document.querySelectorAll(`.radio-option[data-setting="${settingKey}"]`).forEach(option => {
+    if (option.getAttribute('data-value') === value) {
+      option.classList.add('selected');
+    } else {
+      option.classList.remove('selected');
+    }
+  });
+}
+
+function applyLanguage(lang) {
+  const locale = i18n[lang] || i18n.en;
+
+  const settingsTitle = document.getElementById('settingsTitle');
+  if (settingsTitle) settingsTitle.textContent = locale.settingsTitle;
+
+  const dateDisplayLabel = document.getElementById('dateDisplayLabel');
+  if (dateDisplayLabel) dateDisplayLabel.textContent = locale.dateDisplayLabel;
+
+  const updatedAtOptionText = document.getElementById('optionTextUpdatedAt');
+  if (updatedAtOptionText) updatedAtOptionText.textContent = locale.updatedAtOption;
+
+  const createdAtOptionText = document.getElementById('optionTextCreatedAt');
+  if (createdAtOptionText) createdAtOptionText.textContent = locale.createdAtOption;
+
+  const sortOrderLabel = document.getElementById('sortOrderLabel');
+  if (sortOrderLabel) sortOrderLabel.textContent = locale.sortOrderLabel;
+
+  const sortDescOptionText = document.getElementById('optionTextSortDesc');
+  if (sortDescOptionText) sortDescOptionText.textContent = locale.sortDescOption;
+
+  const sortAscOptionText = document.getElementById('optionTextSortAsc');
+  if (sortAscOptionText) sortAscOptionText.textContent = locale.sortAscOption;
+
+  const languageLabel = document.getElementById('languageLabel');
+  if (languageLabel) languageLabel.textContent = locale.languageLabel;
+
+  const btnNew = document.getElementById('btnNew');
+  if (btnNew) btnNew.title = locale.newNoteTitle;
+
+  const searchBox = document.getElementById('searchBox');
+  if (searchBox) searchBox.placeholder = locale.searchPlaceholder;
+
+  const emptyText = document.querySelector('.empty-text');
+  if (emptyText) emptyText.textContent = locale.emptyStateText;
+
+  const emptyNewNoteButtonText = document.querySelector('#btnNewEmpty span:last-child');
+  if (emptyNewNoteButtonText) emptyNewNoteButtonText.textContent = locale.emptyNewNoteButton;
+
+  const btnDownloadSelected = document.getElementById('btnDownloadSelected');
+  if (btnDownloadSelected) btnDownloadSelected.textContent = locale.downloadSelected;
+}
+
+function sortNotesBySettings(notes) {
+  const sortField = settings.dateDisplay === 'createdAt' ? 'createdAt' : 'updatedAt';
+  const direction = settings.sortOrder === 'asc' ? 1 : -1;
+
+  return [...notes].sort((a, b) => {
+    const timeA = new Date(a[sortField] || 0).getTime();
+    const timeB = new Date(b[sortField] || 0).getTime();
+    return (timeA - timeB) * direction;
+  });
+}
+
 // 加载笔记列表
 async function loadNotesList() {
   const notes = await getNotes();
-  renderNotesList(notes);
+  const sortedNotes = sortNotesBySettings(notes);
+  normalizeActiveNote(notes);
+  renderNotesList(sortedNotes);
+}
+
+// 清理无效激活状态：active 仅允许用于展开/编辑中的笔记
+function normalizeActiveNote(notes) {
+  if (!activeNoteId) return;
+
+  const activeNoteExists = notes.some(note => note.id === activeNoteId);
+  if (!activeNoteExists) {
+    activeNoteId = null;
+    return;
+  }
+
+  const activeMode = modeByNoteId[activeNoteId] || 'collapsed';
+  if (activeMode === 'collapsed') {
+    activeNoteId = null;
+  }
 }
 
 // 渲染笔记列表
 function renderNotesList(notes) {
   const notesList = document.getElementById('notesList');
   notesList.innerHTML = '';
+  const locale = i18n[settings.language] || i18n.en;
 
   if (notes.length === 0) {
     notesList.innerHTML = `
       <div class="empty-state">
         <div class="empty-icon">📝</div>
-        <div class="empty-text">还没有笔记<br>点击下方按钮开始创建</div>
+        <div class="empty-text">${escapeHtml(locale.emptyStateText)}</div>
         <button class="btn-new-large" id="btnNewEmpty">
           <span>+</span>
-          <span>新建笔记</span>
+          <span>${escapeHtml(locale.emptyNewNoteButton)}</span>
         </button>
       </div>
     `;
@@ -134,10 +294,7 @@ function renderNotesList(notes) {
     return;
   }
 
-  // 按最近修改时间倒序排列
-  const sortedNotes = [...notes].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-
-  sortedNotes.forEach(note => {
+  notes.forEach(note => {
     const li = createNoteCard(note);
     notesList.appendChild(li);
   });
@@ -155,7 +312,7 @@ function createNoteCard(note) {
   const mode = modeByNoteId[note.id] || 'collapsed';
   li.classList.add(mode);
 
-  if (activeNoteId === note.id) {
+  if (activeNoteId === note.id && mode !== 'collapsed') {
     li.classList.add('active');
   }
 
@@ -187,6 +344,8 @@ function createNoteCard(note) {
         ? `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>`
         : `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`
       }</button>
+      <button data-action="copy" title="复制"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></button>
+      <button data-action="download" title="下载"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></button>
       <button data-action="edit" title="编辑"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>
       <button data-action="delete" title="删除"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></button>
     `;
@@ -235,11 +394,17 @@ function createNoteCard(note) {
         case 'toggle':
           toggleExpand(note.id);
           break;
+        case 'copy':
+          copySingleNote(note.id);
+          break;
+        case 'download':
+          showDownloadMenu(note.id, btn);
+          break;
         case 'edit':
           enterEditing(note.id);
           break;
         case 'delete':
-          deleteNote(note.id);
+          handleCardDeleteClick(note.id, btn);
           break;
         case 'fullscreen':
           toggleFullscreen(note.id);
@@ -256,6 +421,16 @@ function createNoteCard(note) {
   if (contentWrapper) {
     contentWrapper.addEventListener('click', () => {
       handleContentClick(note.id);
+    });
+  }
+
+  // 事件监听 - 选择框点击
+  const noteCheckbox = li.querySelector('.note-checkbox');
+  if (noteCheckbox) {
+    noteCheckbox.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!isSelectMode) return;
+      toggleNoteSelection(note.id);
     });
   }
 
@@ -362,6 +537,7 @@ function enterEditing(noteId) {
   }
 
   modeByNoteId[noteId] = 'editing';
+  document.getElementById('btnNew').disabled = true;
   isFullscreenByNoteId[noteId] = false;
   activeNoteId = noteId;
   loadNotesList();
@@ -381,10 +557,12 @@ async function exitEditing(noteId) {
     delete modeByNoteId[noteId];
     delete isFullscreenByNoteId[noteId];
     activeNoteId = null;
+    document.getElementById('btnNew').disabled = false;
   } else {
     // 保存内容
     await autoSaveNote(noteId, content);
     modeByNoteId[noteId] = 'expanded';
+    document.getElementById('btnNew').disabled = false;
     isFullscreenByNoteId[noteId] = false;
   }
 
@@ -400,6 +578,7 @@ function toggleFullscreen(noteId) {
 // 收起笔记
 function collapseNote(noteId) {
   modeByNoteId[noteId] = 'collapsed';
+  document.getElementById('btnNew').disabled = false;
   isFullscreenByNoteId[noteId] = false;
 }
 
@@ -415,11 +594,15 @@ function collapseActiveNote() {
 // 更新浮动收起按钮
 function updateFloatingButton() {
   const btn = document.getElementById('floatingCollapseBtn');
-  if (activeNoteId && modeByNoteId[activeNoteId] === 'expanded') {
-    btn.classList.add('visible');
-  } else {
-    btn.classList.remove('visible');
-  }
+  if (!btn) return;
+
+  // 显示逻辑仅由模式状态决定，不受内容高度影响
+  const isActiveExpanded = Boolean(
+    activeNoteId && modeByNoteId[activeNoteId] === 'expanded'
+  );
+  const hasAnyExpanded = Object.values(modeByNoteId).some(mode => mode === 'expanded');
+
+  btn.classList.toggle('visible', isActiveExpanded || hasAnyExpanded);
 }
 
 // 自动保存笔记
@@ -490,6 +673,12 @@ function wrapSelectedText(textarea, before, after) {
 
 // 创建新笔记
 async function createNewNote() {
+  if (activeNoteId && modeByNoteId[activeNoteId] === 'editing') {
+    const editor = document.querySelector('#note-' + activeNoteId + ' .note-editor');
+    if (editor) editor.focus();
+    return;
+  }
+
   const notes = await getNotes();
   const now = new Date().toISOString();
 
@@ -506,6 +695,7 @@ async function createNewNote() {
 
   // 初始化状态
   modeByNoteId[newNote.id] = 'editing';
+  document.getElementById('btnNew').disabled = true;
   isFullscreenByNoteId[newNote.id] = false;
 
   // 收起其他
@@ -519,7 +709,7 @@ async function createNewNote() {
 
 // 删除笔记
 async function deleteNote(noteId) {
-  if (!confirm('确定要删除这个笔记吗？')) return;
+  clearDeleteTimer(`note:${noteId}`);
 
   const notes = await getNotes();
   const filtered = notes.filter(n => n.id !== noteId);
@@ -621,7 +811,7 @@ async function handleSearch() {
     return content.includes(keyword);
   });
 
-  renderNotesList(filteredNotes);
+  renderNotesList(sortNotesBySettings(filteredNotes));
 }
 
 // 多选功能
@@ -640,6 +830,9 @@ async function toggleSelectMode() {
     bottomActions.classList.remove('active');
     notesList.classList.remove('has-bottom-actions');
     selectedNotes.clear();
+    document.getElementById('btnSelectAll').textContent = '全选';
+    resetSelectedDeleteConfirm();
+    hideDownloadMenu();
   }
 
   await loadNotesList();
@@ -661,6 +854,52 @@ function toggleNoteSelection(noteId) {
 function updateSelectedCount() {
   const countEl = document.getElementById('selectedCount');
   countEl.textContent = `已选择 ${selectedNotes.size} 项`;
+
+  // 同步全选按钮文字
+  const allCards = document.querySelectorAll('.note-item.select-mode');
+  const btnSelectAll = document.getElementById('btnSelectAll');
+  if (allCards.length > 0 && selectedNotes.size >= allCards.length) {
+    btnSelectAll.textContent = '取消全选';
+  } else {
+    btnSelectAll.textContent = '全选';
+  }
+}
+
+function toggleSelectAll() {
+  const allCards = document.querySelectorAll('.note-item.select-mode');
+  const isAllSelected = selectedNotes.size >= allCards.length && allCards.length > 0;
+
+  allCards.forEach(card => {
+    const noteId = card.id.replace('note-', '');
+    if (isAllSelected) {
+      selectedNotes.delete(noteId);
+      card.classList.remove('selected');
+    } else {
+      selectedNotes.add(noteId);
+      card.classList.add('selected');
+    }
+  });
+
+  updateSelectedCount();
+}
+
+function showToast(message) {
+  const toast = document.getElementById('copyToast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 1500);
+}
+
+async function copySingleNote(noteId) {
+  const notes = await getNotes();
+  const note = notes.find(n => n.id === noteId);
+  if (!note) return;
+  try {
+    await navigator.clipboard.writeText(note.content);
+    showToast('Copied!');
+  } catch (err) {
+    alert('复制失败');
+  }
 }
 
 async function copySelectedNotes() {
@@ -677,27 +916,164 @@ async function copySelectedNotes() {
 
   try {
     await navigator.clipboard.writeText(selectedContent);
-    alert(`已复制 ${selectedNotes.size} 条笔记`);
+    showToast(`Copied ${selectedNotes.size} notes`);
+    await toggleSelectMode();
   } catch (err) {
     alert('复制失败');
   }
 }
 
-async function deleteSelectedNotes() {
+function showDownloadMenu(noteId, anchorEl) {
+  const menu = document.getElementById('downloadMenu');
+  if (!menu || !anchorEl) return;
+
+  currentDownloadNoteId = noteId;
+
+  const rect = anchorEl.getBoundingClientRect();
+  const menuWidth = menu.offsetWidth || 160;
+  const maxLeft = window.innerWidth - menuWidth - 8;
+  const left = Math.max(8, Math.min(rect.left, maxLeft));
+  const top = Math.min(rect.bottom + 6, window.innerHeight - 90);
+
+  menu.style.left = `${left}px`;
+  menu.style.top = `${top}px`;
+  menu.classList.add('active');
+}
+
+function hideDownloadMenu() {
+  const menu = document.getElementById('downloadMenu');
+  if (!menu) return;
+  menu.classList.remove('active');
+  currentDownloadNoteId = null;
+}
+
+function stripMarkdown(text) {
+  if (!text) return '';
+  return text
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/^\s*[-*+]\s+/gm, '')
+    .replace(/^\s*\d+\.\s+/gm, '')
+    .replace(/^>\s?/gm, '')
+    .replace(/[*_~]/g, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+function triggerDownload(content, filename) {
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+async function downloadSingleNote(noteId, format) {
+  const notes = await getNotes();
+  const note = notes.find(n => n.id === noteId);
+  if (!note) return;
+
+  const extension = format === 'txt' ? 'txt' : 'md';
+  const content = extension === 'txt' ? stripMarkdown(note.content || '') : (note.content || '');
+  const filename = `note-${note.id}.${extension}`;
+  triggerDownload(content, filename);
+}
+
+async function downloadSelectedNotes(format) {
   if (selectedNotes.size === 0) {
     alert('请先选择笔记');
     return;
   }
 
-  if (!confirm(`确定要删除选中的 ${selectedNotes.size} 条笔记吗？`)) return;
+  const extension = format === 'txt' ? 'txt' : 'md';
+  const notes = await getNotes();
+  const selectedList = notes.filter(n => selectedNotes.has(n.id));
+
+  const content = selectedList.map((note, index) => {
+    const body = extension === 'txt' ? stripMarkdown(note.content || '') : (note.content || '');
+    if (extension === 'txt') {
+      return `Note ${index + 1}\n${body}`;
+    }
+    return `## Note ${index + 1}\n\n${body}`;
+  }).join(extension === 'txt' ? '\n\n--------------------\n\n' : '\n\n---\n\n');
+
+  const filename = `dashnote-selected-${Date.now()}.${extension}`;
+  triggerDownload(content, filename);
+}
+
+async function deleteSelectedNotes() {
+  const btnDeleteSelected = document.getElementById('btnDeleteSelected');
+  if (selectedNotes.size === 0) {
+    resetSelectedDeleteConfirm();
+    alert('请先选择笔记');
+    return;
+  }
+
+  if (!btnDeleteSelected.classList.contains('confirm-delete')) {
+    btnDeleteSelected.classList.add('confirm-delete');
+    btnDeleteSelected.textContent = 'Confirm Delete';
+    setDeleteTimer('selected-delete', () => {
+      btnDeleteSelected.classList.remove('confirm-delete');
+      btnDeleteSelected.textContent = '删除';
+    });
+    return;
+  }
+
+  resetSelectedDeleteConfirm();
 
   const notes = await getNotes();
   const filtered = notes.filter(n => !selectedNotes.has(n.id));
   await saveNotes(filtered);
 
   selectedNotes.clear();
-  await loadNotesList();
-  updateSelectedCount();
+  await toggleSelectMode();
+}
+
+function handleCardDeleteClick(noteId, button) {
+  const timerKey = `note:${noteId}`;
+  if (!button.classList.contains('confirm-delete')) {
+    button.classList.add('confirm-delete');
+    setDeleteTimer(timerKey, () => {
+      button.classList.remove('confirm-delete');
+    });
+    return;
+  }
+
+  button.classList.remove('confirm-delete');
+  clearDeleteTimer(timerKey);
+  deleteNote(noteId);
+}
+
+function setDeleteTimer(key, onTimeout) {
+  clearDeleteTimer(key);
+  const timer = setTimeout(() => {
+    deleteTimers.delete(key);
+    onTimeout();
+  }, 2000);
+  deleteTimers.set(key, timer);
+}
+
+function clearDeleteTimer(key) {
+  const timer = deleteTimers.get(key);
+  if (timer) {
+    clearTimeout(timer);
+    deleteTimers.delete(key);
+  }
+}
+
+function resetSelectedDeleteConfirm() {
+  const btnDeleteSelected = document.getElementById('btnDeleteSelected');
+  if (!btnDeleteSelected) return;
+  btnDeleteSelected.classList.remove('confirm-delete');
+  btnDeleteSelected.textContent = '删除';
+  clearDeleteTimer('selected-delete');
 }
 
 // 设置功能

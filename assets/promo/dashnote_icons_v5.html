@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashNote Icon Specification System</title>
+    <style>
+        :root {
+            --bg: #f8f9fa;
+            --text-main: #1a1a1a;
+            --text-muted: #666;
+            --border: #e2e8f0;
+            --accent: #2563eb;
+            --card-bg: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding: 40px 20px;
+        }
+
+        header {
+            max-width: 1000px;
+            margin: 0 auto 60px auto;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* <!-- FEATURE: Grid layout for 10 icon variations --> */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* <!-- FEATURE: Responsive card design for each icon set --> */
+        .icon-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .icon-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        .icon-display {
+            display: flex;
+            align-items: flex-end;
+            gap: 24px;
+            margin-bottom: 24px;
+            min-height: 128px;
+        }
+
+        .size-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-top: 8px;
+            display: block;
+            text-align: center;
+        }
+
+        .style-meta {
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+        }
+
+        .style-num {
+            font-family: monospace;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .style-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .style-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Container for icons to ensure sizing is perfect */
+        .icon-box {
+            display: inline-block;
+            vertical-align: bottom;
+        }
+
+        .px128 { width: 128px; height: 128px; }
+        .px32 { width: 32px; height: 32px; }
+        .px16 { width: 16px; height: 16px; }
+
+        @media (max-width: 768px) {
+            .icon-grid { grid-template-columns: 1fr; }
+        }
+
+        /* SVG Global Styles */
+        svg { width: 100%; height: 100%; display: block; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>DashNote</h1>
+    <p>Visual identity concepts for the premium note-taking browser extension. Every icon explores a different writing metaphor.</p>
+</header>
+
+<div class="icon-grid">
+
+    <!-- STYLE 01: FOLDED CORNER -->
+    <div class="icon-card">
+        <div class="icon-display">
+            <div class="icon-box px128" id="icon-01"></div>
+            <div class="icon-box px32"></div>
+            <div class="icon-box px16"></div>
+        </div>
+        <div class="style-meta">
+            <div class="style-num">01</div>
+            <div class="style-name">Folded Corner</div>
+            <div class="style-desc">Warm white page with a classic diagonal dog-ear and subtle ruled lines.</div>
+        </div>
+    </div>
+
+    <!-- STYLE 02: PENCIL STROKE D -->
+    <div class="icon-card">
+        <div class="icon-display">
+            <div class="icon-box px128" id="icon-02"></div>
+            <div class="icon-box px32"></div>
+            <div class="icon-box px16"></div>
+        </div>
+        <div class="style-meta">
+            <div class="style-num">02</div>
+            <div class="style-name">Pencil Stroke 'D'</div>
+            <div class="style-desc">Textured graphite 'D' with varying stroke weights and an underline.</div>
+        </div>
+    </div>
+
+    <!-- STYLE 03: RULED NOTEBOOK -->
+    <div class="icon-card">
+        <div class="icon-display">
+            <div class="icon-box px128" id="icon-03"></div>
+            <div class="icon-box px32"></div>
+            <div class="icon-box px16"></div>
+        </div>
+        <div class="style-meta">
+            <div class="style-num">03</div>
+            <div class="style-name">Ruled Notebook</div>
+            <div class="style-desc">Open notebook spread on deep forest green with visible center binding.</div>
+        </div>
+    </div>
+
+    <!-- STYLE 04: BULLET JOURNAL -->
+    <div class="icon-card">
+        <div class="icon-display">
+            <div class="icon-box px128" id="icon-04"></div>
+            <div class="icon-box px32"></div>
+            <div class="icon-box px16"></div>
+        </div>
+        <div class="style-meta">
+            <div class="style-num">04</div>
+            <div class="style-name">Bullet Journal</div>
+            <div class="style-desc">Minimalistic geometric symbols representing task states (Done, To-Do, Cancelled).</div>
+        </div>
+    </div>
+
+    <!-- STYLE 05: STICKY NOTE -->
+    <div class="icon-card">
+        <div class="icon-display">
+            <div class="icon-box px128" id="icon-05"></div>
+            <div class="icon-box px32"></div>
+            <div class="icon-box px16"></div>
+        </div>
+        <div class="style-meta">
+            <div class="style-num">05</div>
+            <div class="style-name">Sticky Note</div>
+            <div class="style-desc">Vibrant tilted yellow note with a lift-effect shadow and abstract text lines.</div>
+        </div>
+    </div>
+
+    <!-- STYLE 06: MEMO PAD -->
+    <div class="icon-card">
+        <div class="icon-display">
+            <div class="icon-box px128" id="icon-06"></div>
+            <div class="icon-box px32"></div>
+            <div class="icon-box px16"></div>
+        </div>
+        <div class="style-meta">
+            <div class="style-num">06</div>
+            <div class="style-name">Memo Pad</div>
+            <div class="style-desc">Top-wire spiral binding pad in pale blue with precise professional illustration.</div>
+        </div>
+    </div>
+
+    <!-- STYLE 07: INK BLOT LETTER -->
+    <div class="icon-card">
+        <div class="icon-display">
+            <div class="icon-box px128" id="icon-07"></div>
+            <div class="icon-box px32"></div>
+            <div class="icon-box px16"></div>
+        </div>
+        <div class="style-meta">
+            <div class="style-num">07</div>
+            <div class="style-name">Ink Blot Letter</div>
+            <div class="style-desc">Raw, stamped aesthetic with bleed effects and ink-transfer ruled lines.</div>
+        </div>
+    </div>
+
+    <!-- STYLE 08: MARGIN NOTES -->
+    <div class="icon-card">
+        <div class="icon-display">
+            <div class="icon-box px128" id="icon-08"></div>
+            <div class="icon-box px32"></div>
+            <div class="icon-box px16"></div>
+        </div>
+        <div class="style-meta">
+            <div class="style-num">08</div>
+            <div class="style-name">Margin Notes</div>
+            <div class="style-desc">Editorial style with a red margin vertical and handwritten asterisk.</div>
+        </div>
+    </div>
+
+    <!-- STYLE 09: TORN PAPER -->
+    <div class="icon-card">
+        <div class="icon-display">
+            <div class="icon-box px128" id="icon-09"></div>
+            <div class="icon-box px32"></div>
+            <div class="icon-box px16"></div>
+        </div>
+        <div class="style-meta">
+            <div class="style-num">09</div>
+            <div class="style-name">Torn Paper</div>
+            <div class="style-desc">High contrast charcoal background with an irregular jagged paper fragment.</div>
+        </div>
+    </div>
+
+    <!-- STYLE 10: STACKED NOTES -->
+    <div class="icon-card">
+        <div class="icon-display">
+            <div class="icon-box px128" id="icon-10"></div>
+            <div class="icon-box px32"></div>
+            <div class="icon-box px16"></div>
+        </div>
+        <div class="style-meta">
+            <div class="style-num">10</div>
+            <div class="style-name">Stacked Notes</div>
+            <div class="style-desc">Fanned sequence of paper sheets showing depth and organization.</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    /* <!-- FEATURE: SVG Generation Engine --> */
+    const icons = {
+        '01': `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="128" height="128" rx="24" fill="white"/>
+            <path d="M24 20H84L108 44V108H24V20Z" fill="#FDFBF7"/>
+            <path d="M84 20V44H108L84 20Z" fill="#E8E4D9"/>
+            <line x1="40" y1="64" x2="92" y2="64" stroke="#D1D1D1" stroke-width="2"/>
+            <line x1="40" y1="76" x2="92" y2="76" stroke="#D1D1D1" stroke-width="2"/>
+            <line x1="40" y1="88" x2="72" y2="88" stroke="#D1D1D1" stroke-width="2"/>
+        </svg>`,
+
+        '02': `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="128" height="128" rx="24" fill="white"/>
+            <path d="M42 35V93M42 35C65 35 88 40 88 64C88 88 65 93 42 93" stroke="#333" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray: 2, 1;"/>
+            <line x1="42" y1="102" x2="88" y2="102" stroke="#999" stroke-width="2"/>
+        </svg>`,
+
+        '03': `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="128" height="128" rx="24" fill="#1B4332"/>
+            <rect x="20" y="24" width="44" height="80" rx="2" fill="#FEF9EC"/>
+            <rect x="64" y="24" width="44" height="80" rx="2" fill="#FEF9EC"/>
+            <line x1="28" y1="40" x2="56" y2="40" stroke="#E2DCC8" stroke-width="2"/>
+            <line x1="28" y1="52" x2="56" y2="52" stroke="#E2DCC8" stroke-width="2"/>
+            <line x1="28" y1="64" x2="56" y2="64" stroke="#E2DCC8" stroke-width="2"/>
+            <line x1="72" y1="40" x2="100" y2="40" stroke="#E2DCC8" stroke-width="2"/>
+            <line x1="72" y1="52" x2="100" y2="52" stroke="#E2DCC8" stroke-width="2"/>
+            <line x1="72" y1="64" x2="100" y2="64" stroke="#E2DCC8" stroke-width="2"/>
+            <rect x="62" y="24" width="4" height="80" fill="#1B4332" opacity="0.1"/>
+        </svg>`,
+
+        '04': `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="128" height="128" rx="24" fill="white"/>
+            <circle cx="64" cy="35" r="5" fill="#1a1a1a"/>
+            <circle cx="64" cy="54" r="4" stroke="#1a1a1a" stroke-width="2"/>
+            <rect x="58" y="73" width="12" height="2" rx="1" fill="#1a1a1a"/>
+            <path d="M59 88L69 98M69 88L59 98" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>`,
+
+        '05': `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="128" height="128" rx="24" fill="white"/>
+            <g transform="rotate(3, 64, 64)">
+                <rect x="26" y="26" width="76" height="76" fill="#000" fill-opacity="0.1"/>
+                <rect x="24" y="24" width="80" height="80" fill="#FFD60A"/>
+                <path d="M24 24H44L24 44V24Z" fill="#F0C800"/>
+                <rect x="44" y="55" width="40" height="4" rx="2" fill="#000" fill-opacity="0.1"/>
+                <rect x="44" y="67" width="30" height="4" rx="2" fill="#000" fill-opacity="0.1"/>
+            </g>
+        </svg>`,
+
+        '06': `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="128" height="128" rx="24" fill="#E8F4FD"/>
+            <rect x="28" y="32" width="72" height="76" rx="4" fill="white"/>
+            <circle cx="40" cy="32" r="3" fill="#475569"/>
+            <circle cx="52" cy="32" r="3" fill="#475569"/>
+            <circle cx="64" cy="32" r="3" fill="#475569"/>
+            <circle cx="76" cy="32" r="3" fill="#475569"/>
+            <circle cx="88" cy="32" r="3" fill="#475569"/>
+            <line x1="40" y1="56" x2="88" y2="56" stroke="#E2E8F0" stroke-width="3"/>
+            <line x1="40" y1="72" x2="88" y2="72" stroke="#E2E8F0" stroke-width="3"/>
+            <line x1="40" y1="88" x2="68" y2="88" stroke="#E2E8F0" stroke-width="3"/>
+        </svg>`,
+
+        '07': `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="128" height="128" rx="24" fill="white"/>
+            <path d="M38 35V93M38 35C65 32 88 44 88 64C88 84 65 96 38 93" stroke="black" stroke-width="9" stroke-linecap="round"/>
+            <circle cx="88" cy="64" r="4" fill="black"/>
+            <circle cx="38" cy="35" r="3" fill="black"/>
+            <line x1="82" y1="90" x2="100" y2="90" stroke="black" stroke-width="2"/>
+            <line x1="82" y1="98" x2="100" y2="98" stroke="black" stroke-width="2"/>
+        </svg>`,
+
+        '08': `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="128" height="128" rx="24" fill="white"/>
+            <line x1="45" y1="20" x2="45" y2="108" stroke="#CC0000" stroke-width="1.5"/>
+            <g opacity="0.8">
+                <line x1="55" y1="40" x2="100" y2="40" stroke="#333" stroke-width="2"/>
+                <line x1="55" y1="55" x2="100" y2="55" stroke="#333" stroke-width="2"/>
+                <line x1="55" y1="70" x2="100" y2="70" stroke="#333" stroke-width="2"/>
+                <line x1="55" y1="85" x2="100" y2="85" stroke="#333" stroke-width="2"/>
+            </g>
+            <path d="M32 36L38 42M38 36L32 42M35 34V44M30 39H40" stroke="#CC0000" stroke-width="1.5"/>
+        </svg>`,
+
+        '09': `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="128" height="128" rx="24" fill="#1C1C1E"/>
+            <path d="M30 30H98V80L93 75L86 82L80 76L72 84L65 77L58 83L50 75L43 82L36 76L30 81V30Z" fill="white"/>
+            <text x="64" y="60" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="20" fill="#1C1C1E">DN</text>
+        </svg>`,
+
+        '10': `<svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="128" height="128" rx="24" fill="white"/>
+            <rect x="42" y="42" width="60" height="70" rx="2" fill="#E0E0E0"/>
+            <rect x="34" y="34" width="60" height="70" rx="2" fill="#F0F0F0"/>
+            <rect x="26" y="26" width="60" height="70" rx="2" fill="white" stroke="#E0E0E0" stroke-width="1"/>
+            <line x1="36" y1="40" x2="76" y2="40" stroke="#D1D1D1" stroke-width="2"/>
+            <line x1="36" y1="52" x2="76" y2="52" stroke="#D1D1D1" stroke-width="2"/>
+            <line x1="36" y1="64" x2="60" y2="64" stroke="#D1D1D1" stroke-width="2"/>
+        </svg>`
+    };
+
+    /* <!-- FEATURE: Dynamic renderer to populate all size variants --> */
+    function renderIcons() {
+        Object.keys(icons).forEach(id => {
+            const container = document.getElementById(`icon-${id}`);
+            if (container) {
+                const parent = container.parentElement;
+                const svgString = icons[id];
+                
+                // 128px
+                container.innerHTML = svgString;
+                
+                // 32px
+                const px32Box = parent.querySelector('.px32');
+                px32Box.innerHTML = svgString;
+                const label32 = document.createElement('span');
+                label32.className = 'size-label';
+                label32.innerText = '32px';
+                px32Box.appendChild(label32);
+
+                // 16px
+                const px16Box = parent.querySelector('.px16');
+                px16Box.innerHTML = svgString;
+                const label16 = document.createElement('span');
+                label16.className = 'size-label';
+                label16.innerText = '16px';
+                px16Box.appendChild(label16);
+
+                // Add main size label
+                const label128 = document.createElement('span');
+                label128.className = 'size-label';
+                label128.innerText = '128px';
+                container.appendChild(label128);
+            }
+        });
+    }
+
+    // Initialize
+    window.onload = renderIcons;
+</script>
+
+</body>
+</html>

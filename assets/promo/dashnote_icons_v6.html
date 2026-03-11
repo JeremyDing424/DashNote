@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticky Notes: Extension Icon Set</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f7;
+            --panel-color: #ffffff;
+            --text-main: #1a1a1e;
+            --text-muted: #666670;
+            --accent: #4a5568;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        header {
+            margin-bottom: 48px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* <!-- FEATURE: Responsive 2-column grid for showcasing icon variations --> */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
+            gap: 32px;
+        }
+
+        /* <!-- FEATURE: Card container for each icon style with size previews --> */
+        .icon-card {
+            background: var(--panel-color);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid var(--border);
+        }
+
+        .icon-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .card-info h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .card-info span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
+        .previews {
+            display: flex;
+            align-items: flex-end;
+            gap: 24px;
+            padding: 20px;
+            background: #fdfdfd;
+            border-radius: 16px;
+            border: 1px inset rgba(0,0,0,0.02);
+            min-height: 180px;
+        }
+
+        /* Shared Icon Component Styles */
+        .preview-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preview-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #a0aec0;
+            text-transform: uppercase;
+        }
+
+        .icon-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .size-128 { width: 128px; height: 128px; border-radius: 20px; }
+        .size-32 { width: 32px; height: 32px; border-radius: 6px; }
+        .size-16 { width: 16px; height: 16px; border-radius: 3px; }
+
+        /* Specific Icon Styles */
+
+        /* 01 CLASSIC WARM */
+        .classic-bg { background: white; }
+        .classic-note {
+            background: #FFD60A;
+            width: 80%; height: 80%;
+            transform: rotate(3deg);
+            box-shadow: 2px 4px 8px rgba(0,0,0,0.15);
+            position: relative;
+            display: flex; flex-direction: column; padding: 10%; gap: 10%;
+        }
+        .classic-fold {
+            position: absolute; top: 0; left: 0;
+            width: 0; height: 0;
+            border-style: solid;
+            border-width: 20px 20px 0 0;
+            border-color: #fff #e6c000 transparent transparent;
+        }
+        .classic-line { height: 4px; background: rgba(0,0,0,0.15); border-radius: 2px; width: 100%; }
+
+        /* 02 DARK MODE */
+        .dark-bg { background: #111; }
+        .dark-note {
+            background: #FFE566;
+            width: 75%; height: 75%;
+            box-shadow: 0 0 20px rgba(255, 229, 102, 0.4);
+            display: flex; flex-direction: column; padding: 15%; gap: 12%;
+            border-radius: 2px;
+        }
+        .dark-line { height: 6px; background: #fff; border-radius: 3px; }
+
+        /* 03 NEON CYBER */
+        .cyber-bg { background: #000; }
+        .cyber-note {
+            width: 70%; height: 70%;
+            border: 3px solid #39FF14;
+            box-shadow: 0 0 15px #39FF14, inset 0 0 5px #39FF14;
+            display: flex; flex-direction: column; padding: 15%; gap: 15%; justify-content: center;
+        }
+        .cyber-line { height: 3px; background: #00FFFF; box-shadow: 0 0 8px #00FFFF; }
+
+        /* 04 PASTEL STACK */
+        .pastel-bg { background: #fff; }
+        .pastel-stack { position: relative; width: 80%; height: 80%; }
+        .pastel-note { position: absolute; width: 80%; height: 80%; border-radius: 4px; }
+        .p-1 { background: #E2D1F9; transform: rotate(-5deg); top: 5%; left: 5%; }
+        .p-2 { background: #D1F9E2; transform: rotate(5deg); top: 10%; left: 15%; }
+        .p-3 { 
+            background: #F9E2D1; top: 15%; left: 10%; 
+            display: flex; flex-direction: column; padding: 15%; gap: 15%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .pastel-line { height: 4px; background: rgba(0,0,0,0.1); border-radius: 2px; }
+
+        /* 05 WASHI TAPE */
+        .washi-bg { background: #FFF8F0; }
+        .washi-note {
+            background: #fff; width: 70%; height: 80%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: relative; margin-top: 10px;
+        }
+        .washi-tape {
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%) rotate(-2deg);
+            width: 60%; height: 20px;
+            background: repeating-linear-gradient(45deg, #ff9a9e, #ff9a9e 10px, #fad0c4 10px, #fad0c4 20px);
+            opacity: 0.8;
+        }
+
+        /* 06 SWISS GRID */
+        .swiss-bg { background: #fff; }
+        .swiss-note {
+            width: 70%; height: 70%; border: 1px solid #000;
+            display: flex; flex-direction: column; padding: 0;
+        }
+        .swiss-line { border-bottom: 1px solid #000; height: 25%; width: 100%; }
+
+        /* 07 RISOGRAPH */
+        .riso-bg { background: #FFF8F0; }
+        .riso-shadow {
+            position: absolute; width: 70%; height: 70%;
+            background: #000080; top: 22%; left: 22%; opacity: 0.6;
+            mix-blend-mode: multiply;
+        }
+        .riso-note {
+            position: absolute; width: 70%; height: 70%;
+            background: #E8453C; top: 15%; left: 15%;
+            display: flex; flex-direction: column; padding: 15%; gap: 15%;
+        }
+        .riso-line { height: 6px; background: #FFF8F0; opacity: 0.8; }
+
+        /* 08 LUXURY GOLD */
+        .luxury-bg { background: #0A0A0A; }
+        .luxury-note {
+            width: 65%; height: 65%;
+            border: 1px solid #C9A96E;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12%;
+        }
+        .luxury-line { width: 60%; height: 1px; background: #C9A96E; }
+
+        /* 09 RETRO 70s */
+        .retro-bg { background: #D4A017; }
+        .retro-note {
+            background: #E86F2C; width: 75%; height: 75%;
+            border-radius: 20px;
+            box-shadow: 6px 6px 0px #8B4513;
+            display: flex; flex-direction: column; padding: 20%; gap: 15%;
+        }
+        .retro-line { height: 8px; background: #F5E6BE; border-radius: 10px; }
+
+        /* 10 FROSTED GLASS */
+        .glass-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .glass-note {
+            width: 75%; height: 75%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            display: flex; flex-direction: column; padding: 15%; gap: 15%;
+        }
+        .glass-line { height: 4px; background: rgba(255, 255, 255, 0.6); border-radius: 2px; }
+
+        /* Responsive scaling for smaller sizes */
+        .size-32 .classic-fold { border-width: 6px 6px 0 0; }
+        .size-32 .classic-line { height: 2px; }
+        .size-16 .classic-line { height: 1.5px; margin-top: 2px; }
+        .size-32 .dark-line { height: 3px; }
+        .size-16 .dark-line { height: 2px; }
+        .size-32 .cyber-note { border-width: 1.5px; }
+        .size-16 .cyber-note { border-width: 1px; }
+        .size-32 .retro-note { border-radius: 6px; box-shadow: 2px 2px 0px #8B4513; }
+        .size-16 .retro-note { border-radius: 3px; box-shadow: 1px 1px 0px #8B4513; padding: 10%; }
+        .size-32 .washi-tape { height: 6px; top: -3px; }
+        .size-16 .washi-tape { height: 3px; top: -1px; }
+
+        .size-16 .classic-fold, .size-16 .p-1, .size-16 .p-2 { display: none; }
+        .size-16 .p-3 { width: 100%; height: 100%; top: 0; left: 0; }
+
+        footer {
+            margin-top: 80px;
+            text-align: center;
+            padding-bottom: 40px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .download-btn {
+            background: #1a1a1e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .download-btn:hover {
+            background: #4a5568;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Sticky Icon Variations</h1>
+            <p>10 Radical design directions for a browser extension icon concept.</p>
+        </header>
+
+        <div class="icon-grid">
+            
+            <!-- 01 CLASSIC WARM -->
+            <!-- FEATURE: Classic sticky note aesthetic with a realistic paper fold -->
+            <div class="icon-card">
+                <div class="card-header">
+                    <div class="card-info">
+                        <h2>01. Classic Warm</h2>
+                        <span>#FFD60A | 3° Tilt | Top-Fold</span>
+                    </div>
+                    <button class="download-btn">SVG</button>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-128 classic-bg">
+                            <div class="classic-note">
+                                <div class="classic-fold"></div>
+                                <div class="classic-line"></div>
+                                <div class="classic-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">128px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-32 classic-bg">
+                            <div class="classic-note">
+                                <div class="classic-fold"></div>
+                                <div class="classic-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">32px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-16 classic-bg">
+                            <div class="classic-note">
+                                <div class="classic-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">16px</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 02 DARK MODE -->
+            <!-- FEATURE: High contrast dark UI style with emissive yellow glow -->
+            <div class="icon-card">
+                <div class="card-header">
+                    <div class="card-info">
+                        <h2>02. Dark Mode</h2>
+                        <span>#111111 | Glow Effect | Premium</span>
+                    </div>
+                    <button class="download-btn">SVG</button>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-128 dark-bg">
+                            <div class="dark-note">
+                                <div class="dark-line"></div>
+                                <div class="dark-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">128px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-32 dark-bg">
+                            <div class="dark-note">
+                                <div class="dark-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">32px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-16 dark-bg">
+                            <div class="dark-note">
+                                <div class="dark-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">16px</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 03 NEON CYBER -->
+            <!-- FEATURE: Wireframe glow aesthetic optimized for cyberpunk themes -->
+            <div class="icon-card">
+                <div class="card-header">
+                    <div class="card-info">
+                        <h2>03. Neon Cyber</h2>
+                        <span>Stroke Only | Lime Glow | Cyan Text</span>
+                    </div>
+                    <button class="download-btn">SVG</button>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-128 cyber-bg">
+                            <div class="cyber-note">
+                                <div class="cyber-line"></div>
+                                <div class="cyber-line"></div>
+                                <div class="cyber-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">128px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-32 cyber-bg">
+                            <div class="cyber-note">
+                                <div class="cyber-line"></div>
+                                <div class="cyber-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">32px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-16 cyber-bg">
+                            <div class="cyber-note">
+                                <div class="cyber-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">16px</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 04 PASTEL STACK -->
+            <!-- FEATURE: Layered notes showcasing a 'stack' of thoughts or tasks -->
+            <div class="icon-card">
+                <div class="card-header">
+                    <div class="card-info">
+                        <h2>04. Pastel Stack</h2>
+                        <span>Lavender | Mint | Peach Fanning</span>
+                    </div>
+                    <button class="download-btn">SVG</button>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-128 pastel-bg">
+                            <div class="pastel-stack">
+                                <div class="pastel-note p-1"></div>
+                                <div class="pastel-note p-2"></div>
+                                <div class="pastel-note p-3">
+                                    <div class="pastel-line"></div>
+                                    <div class="pastel-line"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="preview-label">128px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-32 pastel-bg">
+                            <div class="pastel-stack">
+                                <div class="pastel-note p-1"></div>
+                                <div class="pastel-note p-2"></div>
+                                <div class="pastel-note p-3"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">32px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-16 pastel-bg">
+                            <div class="pastel-stack">
+                                <div class="pastel-note p-3"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">16px</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 05 WASHI TAPE -->
+            <!-- FEATURE: Journaling aesthetic with textured tape strip -->
+            <div class="icon-card">
+                <div class="card-header">
+                    <div class="card-info">
+                        <h2>05. Washi Tape</h2>
+                        <span>Journal Aesthetic | Patterned Tape</span>
+                    </div>
+                    <button class="download-btn">SVG</button>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-128 washi-bg">
+                            <div class="washi-note">
+                                <div class="washi-tape"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">128px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-32 washi-bg">
+                            <div class="washi-note">
+                                <div class="washi-tape"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">32px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-16 washi-bg">
+                            <div class="washi-note">
+                                <div class="washi-tape"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">16px</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 06 SWISS GRID -->
+            <!-- FEATURE: Brutalist minimal approach using hair-line strokes and 0 tilt -->
+            <div class="icon-card">
+                <div class="card-header">
+                    <div class="card-info">
+                        <h2>06. Swiss Grid</h2>
+                        <span>Minimalist | Hairline Border | 0°</span>
+                    </div>
+                    <button class="download-btn">SVG</button>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-128 swiss-bg">
+                            <div class="swiss-note">
+                                <div class="swiss-line"></div>
+                                <div class="swiss-line"></div>
+                                <div class="swiss-line"></div>
+                                <div class="swiss-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">128px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-32 swiss-bg">
+                            <div class="swiss-note">
+                                <div class="swiss-line"></div>
+                                <div class="swiss-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">32px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-16 swiss-bg">
+                            <div class="swiss-note">
+                                <div class="swiss-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">16px</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 07 RISOGRAPH -->
+            <!-- FEATURE: Print misregistration effect with offset ink-navy shadow -->
+            <div class="icon-card">
+                <div class="card-header">
+                    <div class="card-info">
+                        <h2>07. Risograph</h2>
+                        <span>#E8453C | Ink Misregistration</span>
+                    </div>
+                    <button class="download-btn">SVG</button>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-128 riso-bg">
+                            <div class="riso-shadow"></div>
+                            <div class="riso-note">
+                                <div class="riso-line"></div>
+                                <div class="riso-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">128px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-32 riso-bg">
+                            <div class="riso-shadow" style="top:15%; left:15%;"></div>
+                            <div class="riso-note" style="top:5%; left:5%;"></div>
+                        </div>
+                        <div class="preview-label">32px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-16 riso-bg">
+                            <div class="riso-note" style="width:100%; height:100%; top:0; left:0;"></div>
+                        </div>
+                        <div class="preview-label">16px</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 08 LUXURY GOLD -->
+            <!-- FEATURE: Thin gold wireframe for premium productivity extensions -->
+            <div class="icon-card">
+                <div class="card-header">
+                    <div class="card-info">
+                        <h2>08. Luxury Gold</h2>
+                        <span>#C9A96E | Outline Only | Black BG</span>
+                    </div>
+                    <button class="download-btn">SVG</button>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-128 luxury-bg">
+                            <div class="luxury-note">
+                                <div class="luxury-line"></div>
+                                <div class="luxury-line"></div>
+                                <div class="luxury-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">128px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-32 luxury-bg">
+                            <div class="luxury-note">
+                                <div class="luxury-line"></div>
+                                <div class="luxury-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">32px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-16 luxury-bg">
+                            <div class="luxury-note">
+                                <div class="luxury-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">16px</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 09 RETRO 70s -->
+            <!-- FEATURE: Chunky corners and bold drop-shadow for a vintage vibe -->
+            <div class="icon-card">
+                <div class="card-header">
+                    <div class="card-info">
+                        <h2>09. Retro 70s</h2>
+                        <span>Mustard & Burnt Orange | Chunky</span>
+                    </div>
+                    <button class="download-btn">SVG</button>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-128 retro-bg">
+                            <div class="retro-note">
+                                <div class="retro-line"></div>
+                                <div class="retro-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">128px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-32 retro-bg">
+                            <div class="retro-note">
+                                <div class="retro-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">32px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-16 retro-bg">
+                            <div class="retro-note"></div>
+                        </div>
+                        <div class="preview-label">16px</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10 FROSTED GLASS -->
+            <!-- FEATURE: Modern glassmorphism with backdrop blur and soft borders -->
+            <div class="icon-card">
+                <div class="card-header">
+                    <div class="card-info">
+                        <h2>10. Frosted Glass</h2>
+                        <span>Backdrop Blur | 20% Opacity</span>
+                    </div>
+                    <button class="download-btn">SVG</button>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-128 glass-bg">
+                            <div class="glass-note">
+                                <div class="glass-line"></div>
+                                <div class="glass-line"></div>
+                                <div class="glass-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">128px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-32 glass-bg">
+                            <div class="glass-note">
+                                <div class="glass-line"></div>
+                                <div class="glass-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">32px</div>
+                    </div>
+                    <div class="preview-box">
+                        <div class="icon-wrapper size-16 glass-bg">
+                            <div class="glass-note">
+                                <div class="glass-line"></div>
+                            </div>
+                        </div>
+                        <div class="preview-label">16px</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            Built for design systems exploration. Click SVG to copy code (Simulated).
+        </footer>
+    </div>
+
+    <script>
+        /* <!-- FEATURE: Interaction for button clicks to simulate functionality --> */
+        document.querySelectorAll('.download-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const originalText = button.innerText;
+                const cardTitle = button.closest('.icon-card').querySelector('h2').innerText;
+                
+                button.innerText = 'COPIED!';
+                button.style.backgroundColor = '#10b981';
+                
+                console.log(`Copying asset source for: ${cardTitle}`);
+                
+                setTimeout(() => {
+                    button.innerText = originalText;
+                    button.style.backgroundColor = '';
+                }, 1500);
+            });
+        });
+
+        /* <!-- FEATURE: Hover micro-interaction for icons --> */
+        document.querySelectorAll('.icon-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const icon = card.querySelector('.size-128 .icon-wrapper > div');
+                if(icon) {
+                    icon.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    icon.style.transform += ' scale(1.05)';
+                }
+            });
+            card.addEventListener('mouseleave', () => {
+                const icon = card.querySelector('.size-128 .icon-wrapper > div');
+                if(icon) {
+                    icon.style.transform = icon.style.transform.replace(' scale(1.05)', '');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

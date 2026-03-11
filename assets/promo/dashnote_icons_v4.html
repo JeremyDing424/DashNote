@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashNote Icon Spec — Series II</title>
+    <style>
+        :root {
+            --bg: #0a0a0b;
+            --panel: #141416;
+            --border: #262629;
+            --text-main: #e4e4e7;
+            --text-dim: #a1a1aa;
+            --accent: #3b82f6;
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.5;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            max-width: 1000px;
+            width: 100%;
+            margin-bottom: 60px;
+            text-align: left;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+            background: linear-gradient(to right, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            max-width: 600px;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .icon-grid { grid-template-columns: 1fr; }
+        }
+
+        /* FEATURE: Individual Icon Card Layout */
+        .icon-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon-card:hover {
+            border-color: #444;
+            transform: translateY(-4px);
+            background: #18181b;
+        }
+
+        .display-area {
+            display: flex;
+            align-items: flex-end;
+            gap: 32px;
+            margin-bottom: 32px;
+            min-height: 128px;
+        }
+
+        .main-icon {
+            width: 128px;
+            height: 128px;
+            background: #000;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .icon-card:hover .main-icon {
+            transform: scale(1.02);
+        }
+
+        .previews {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            justify-content: flex-end;
+            padding-bottom: 4px;
+        }
+
+        .preview-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-dim);
+            font-size: 12px;
+            font-family: monospace;
+        }
+
+        .p-32 { width: 32px; height: 32px; border-radius: 6px; overflow: hidden; }
+        .p-16 { width: 16px; height: 16px; border-radius: 3px; overflow: hidden; }
+
+        .meta {
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        .label {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 13px;
+            color: var(--accent);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .description {
+            color: var(--text-dim);
+            font-size: 14px;
+        }
+
+        svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--glass);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 11px;
+            color: var(--text-dim);
+            border: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FEATURE: Documentation Header -->
+    <header>
+        <h1>DashNote Iconography</h1>
+        <p class="subtitle">Series II: Browser Extension Assets. A exploration of form, material, and brand identity across scales from 128px to 16px.</p>
+    </header>
+
+    <div class="icon-grid">
+
+        <!-- FEATURE: 01 NEGATIVE SPACE -->
+        <div class="icon-card">
+            <span class="badge">01</span>
+            <div class="display-area">
+                <div class="main-icon" style="background:#fff;">
+                    <svg viewBox="0 0 128 128">
+                        <path fill-rule="evenodd" d="M32 32h64v64H32V32zm12 12v40c0 4.4 3.6 8 8 8h10c11 0 20-9 20-20s-9-20-20-20H44zm12 12h8c6.6 0 12 5.4 12 12s-5.4 12-12 12h-8V56zm2 6h10v2H58v-2zm0 4h10v2H58v-2zm0 4h10v2H58v-2z" fill="#000"/>
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="p-32" style="background:#fff;"><svg viewBox="0 0 128 128"><path fill-rule="evenodd" d="M32 32h64v64H32V32zm12 12v40c0 4.4 3.6 8 8 8h10c11 0 20-9 20-20s-9-20-20-20H44zm12 12h8c6.6 0 12 5.4 12 12s-5.4 12-12 12h-8V56zm2 6h10v2H58v-2zm0 4h10v2H58v-2zm0 4h10v2H58v-2z" fill="#000"/></svg></div> 32px
+                    </div>
+                    <div class="preview-box">
+                        <div class="p-16" style="background:#fff;"><svg viewBox="0 0 128 128"><path fill-rule="evenodd" d="M32 32h64v64H32V32zm12 12v40c0 4.4 3.6 8 8 8h10c11 0 20-9 20-20s-9-20-20-20H44zm12 12h8c6.6 0 12 5.4 12 12s-5.4 12-12 12h-8V56zm2 6h10v2H58v-2zm0 4h10v2H58v-2zm0 4h10v2H58v-2z" fill="#000"/></svg></div> 16px
+                    </div>
+                </div>
+            </div>
+            <div class="meta">
+                <span class="label">Negative Space</span>
+                <p class="description">High-contrast solid block with subtractive 'D' and rule lines.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 02 MONOGRAM SEAL -->
+        <div class="icon-card">
+            <span class="badge">02</span>
+            <div class="display-area">
+                <div class="main-icon" style="background:#5C1A1A;">
+                    <svg viewBox="0 0 128 128">
+                        <circle cx="64" cy="64" r="50" fill="none" stroke="#F5F5DC" stroke-width="1.5" opacity="0.6" stroke-dasharray="2 2"/>
+                        <path d="M64 12c-30 0-52 22-52 52s22 52 52 52 52-22 52-52-22-52-52-52zm0 4c28 0 48 20 48 48s-20 48-48 48-48-20-48-48 20-48 48-48z" fill="#4a1515"/>
+                        <text x="64" y="82" font-family="Serif" font-weight="bold" font-size="42" fill="#F5F5DC" text-anchor="middle" letter-spacing="-2">DN</text>
+                        <circle cx="64" cy="64" r="56" fill="none" stroke="#F5F5DC" stroke-width="0.5" opacity="0.3"/>
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="p-32" style="background:#5C1A1A;"><svg viewBox="0 0 128 128"><text x="64" y="85" font-family="Serif" font-weight="bold" font-size="54" fill="#F5F5DC" text-anchor="middle" letter-spacing="-2">DN</text></svg></div> 32px
+                    </div>
+                    <div class="preview-box">
+                        <div class="p-16" style="background:#5C1A1A;"><svg viewBox="0 0 128 128"><text x="64" y="95" font-family="Serif" font-weight="bold" font-size="80" fill="#F5F5DC" text-anchor="middle" letter-spacing="-2">DN</text></svg></div> 16px
+                    </div>
+                </div>
+            </div>
+            <div class="meta">
+                <span class="label">Monogram Seal</span>
+                <p class="description">Bespoke wax-seal aesthetics for executive/pro tiers.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 03 LIQUID MERCURY -->
+        <div class="icon-card">
+            <span class="badge">03</span>
+            <div class="display-area">
+                <div class="main-icon" style="background:#fff;">
+                    <svg viewBox="0 0 128 128">
+                        <defs>
+                            <linearGradient id="chrome" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#eee;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#999;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#444;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M40 30C20 30 20 64 20 64s0 34 20 34h30c25 0 35-20 35-34s-10-34-35-34H40z" fill="url(#chrome)"/>
+                        <path d="M45 40c-10 0-10 24-10 24s0 24 10 24h20c15 0 20-12 20-24s-5-24-20-24H45z" fill="#fff" opacity="0.3"/>
+                        <circle cx="85" cy="45" r="8" fill="#fff" opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="p-32" style="background:#fff;"><svg viewBox="0 0 128 128"><path d="M40 30C20 30 20 64 20 64s0 34 20 34h30c25 0 35-20 35-34s-10-34-35-34H40z" fill="#888"/></svg></div> 32px
+                    </div>
+                    <div class="preview-box">
+                        <div class="p-16" style="background:#fff;"><svg viewBox="0 0 128 128"><path d="M40 30C20 30 20 64 20 64s0 34 20 34h30c25 0 35-20 35-34s-10-34-35-34H40z" fill="#666"/></svg></div> 16px
+                    </div>
+                </div>
+            </div>
+            <div class="meta">
+                <span class="label">Liquid Mercury</span>
+                <p class="description">Futuristic chrome-textured fluid dynamics 'D' form.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 04 ISOMETRIC NOTE -->
+        <div class="icon-card">
+            <span class="badge">04</span>
+            <div class="display-area">
+                <div class="main-icon" style="background:#fff;">
+                    <svg viewBox="0 0 128 128">
+                        <path d="M64 30 L94 45 L94 85 L64 100 L34 85 L34 45 Z" fill="#eee"/>
+                        <path d="M64 30 L94 45 L64 60 L34 45 Z" fill="#f8f8f8" stroke="#333" stroke-width="2"/>
+                        <path d="M34 45 L64 60 L64 100 L34 85 Z" fill="#ddd" stroke="#333" stroke-width="2"/>
+                        <path d="M64 60 L94 45 L94 85 L64 100 Z" fill="#ccc" stroke="#333" stroke-width="2"/>
+                        <line x1="45" y1="58" x2="58" y2="65" stroke="#333" stroke-width="2"/>
+                        <line x1="45" y1="68" x2="58" y2="75" stroke="#333" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="p-32" style="background:#fff;"><svg viewBox="0 0 128 128"><path d="M64 30 L94 45 L94 85 L64 100 L34 85 L34 45 Z" fill="#eee" stroke="#333" stroke-width="4"/></svg></div> 32px
+                    </div>
+                    <div class="preview-box">
+                        <div class="p-16" style="background:#fff;"><svg viewBox="0 0 128 128"><path d="M64 30 L94 45 L94 85 L64 100 L34 85 L34 45 Z" fill="#eee" stroke="#333" stroke-width="8"/></svg></div> 16px
+                    </div>
+                </div>
+            </div>
+            <div class="meta">
+                <span class="label">Isometric Note</span>
+                <p class="description">Clean, geometric 3D drafting style using flat shades.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 05 CONSTRUCTIVIST -->
+        <div class="icon-card">
+            <span class="badge">05</span>
+            <div class="display-area">
+                <div class="main-icon" style="background:#CC2200;">
+                    <svg viewBox="0 0 128 128">
+                        <rect x="-50" y="40" width="250" height="40" fill="#fff" transform="rotate(-45 64 64)"/>
+                        <text x="64" y="78" font-family="Impact, sans-serif" font-size="48" fill="#000" text-anchor="middle" transform="rotate(-45 64 64)">DASH</text>
+                        <path d="M20 20 L40 20 L40 108 L20 108 Z" fill="#000"/>
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="p-32" style="background:#CC2200;"><svg viewBox="0 0 128 128"><rect x="-50" y="40" width="250" height="50" fill="#fff" transform="rotate(-45 64 64)"/></svg></div> 32px
+                    </div>
+                    <div class="preview-box">
+                        <div class="p-16" style="background:#CC2200;"><svg viewBox="0 0 128 128"><rect x="-50" y="40" width="250" height="50" fill="#fff" transform="rotate(-45 64 64)"/></svg></div> 16px
+                    </div>
+                </div>
+            </div>
+            <div class="meta">
+                <span class="label">Constructivist</span>
+                <p class="description">Bold avant-garde energy. High impact visual hierarchy.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 06 ZEN MINIMAL -->
+        <div class="icon-card">
+            <span class="badge">06</span>
+            <div class="display-area">
+                <div class="main-icon" style="background:#fff;">
+                    <svg viewBox="0 0 128 128">
+                        <line x1="20" y1="64" x2="108" y2="64" stroke="#000" stroke-width="1"/>
+                        <rect x="45" y="60" width="4" height="4" fill="#000"/>
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="p-32" style="background:#fff;"><svg viewBox="0 0 128 128"><line x1="20" y1="64" x2="108" y2="64" stroke="#000" stroke-width="4"/><rect x="45" y="58" width="12" height="12" fill="#000"/></svg></div> 32px
+                    </div>
+                    <div class="preview-box">
+                        <div class="p-16" style="background:#fff;"><svg viewBox="0 0 128 128"><line x1="0" y1="64" x2="128" y2="64" stroke="#000" stroke-width="8"/><rect x="40" y="54" width="20" height="20" fill="#000"/></svg></div> 16px
+                    </div>
+                </div>
+            </div>
+            <div class="meta">
+                <span class="label">Zen Minimal</span>
+                <p class="description">Total restraint. A single horizon and a focal point.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 07 KODACHROME -->
+        <div class="icon-card">
+            <span class="badge">07</span>
+            <div class="display-area">
+                <div class="main-icon" style="background:#2C1810;">
+                    <svg viewBox="0 0 128 128">
+                        <rect x="10" y="20" width="8" height="10" rx="1" fill="#444"/>
+                        <rect x="10" y="40" width="8" height="10" rx="1" fill="#444"/>
+                        <rect x="10" y="60" width="8" height="10" rx="1" fill="#444"/>
+                        <rect x="10" y="80" width="8" height="10" rx="1" fill="#444"/>
+                        <rect x="10" y="100" width="8" height="10" rx="1" fill="#444"/>
+                        <path d="M45 35h20c15 0 25 10 25 29s-10 29-25 29H45V35zm12 12v34h8c8 0 13-5 13-17s-5-17-13-17h-8z" fill="#FFB800"/>
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="p-32" style="background:#2C1810;"><svg viewBox="0 0 128 128"><path d="M45 35h20c15 0 25 10 25 29s-10 29-25 29H45V35z" fill="#FFB800"/></svg></div> 32px
+                    </div>
+                    <div class="preview-box">
+                        <div class="p-16" style="background:#2C1810;"><svg viewBox="0 0 128 128"><path d="M20 20h88v88h-88z" fill="#FFB800"/></svg></div> 16px
+                    </div>
+                </div>
+            </div>
+            <div class="meta">
+                <span class="label">Kodachrome Film</span>
+                <p class="description">Analog nostalgia. Warm sepia with safety yellow.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 08 CIRCUIT NOTE -->
+        <div class="icon-card">
+            <span class="badge">08</span>
+            <div class="display-area">
+                <div class="main-icon" style="background:#fff;">
+                    <svg viewBox="0 0 128 128">
+                        <g fill="none" stroke="#222" stroke-width="1.5">
+                            <path d="M40 30h30c20 0 30 15 30 34s-10 34-30 34H40V30z"/>
+                            <circle cx="40" cy="30" r="3" fill="#222"/>
+                            <circle cx="40" cy="98" r="3" fill="#222"/>
+                            <circle cx="100" cy="64" r="3" fill="#222"/>
+                            <path d="M40 50h20"/>
+                            <path d="M40 64h30"/>
+                            <path d="M40 78h20"/>
+                            <circle cx="60" cy="50" r="2" fill="#222"/>
+                            <circle cx="70" cy="64" r="2" fill="#222"/>
+                            <circle cx="60" cy="78" r="2" fill="#222"/>
+                        </g>
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="p-32" style="background:#fff;"><svg viewBox="0 0 128 128"><path d="M40 30h30c20 0 30 15 30 34s-10 34-30 34H40V30z" fill="none" stroke="#000" stroke-width="4"/></svg></div> 32px
+                    </div>
+                    <div class="preview-box">
+                        <div class="p-16" style="background:#fff;"><svg viewBox="0 0 128 128"><path d="M40 30h30c20 0 30 15 30 34s-10 34-30 34H40V30z" fill="none" stroke="#000" stroke-width="8"/></svg></div> 16px
+                    </div>
+                </div>
+            </div>
+            <div class="meta">
+                <span class="label">Circuit Note</span>
+                <p class="description">Schematic design language. Technical and precise.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 09 ORIGAMI FOLD -->
+        <div class="icon-card">
+            <span class="badge">09</span>
+            <div class="display-area">
+                <div class="main-icon" style="background:#fdfcf0;">
+                    <svg viewBox="0 0 128 128">
+                        <path d="M30 30 L80 30 L100 50 L100 100 L30 100 Z" fill="#fff" stroke="#ccc" stroke-width="1"/>
+                        <path d="M80 30 L80 50 L100 50 Z" fill="#eee" stroke="#ccc" stroke-width="1"/>
+                        <path d="M40 50 h25 M40 65 h40 M40 80 h30" stroke="#ddd" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="p-32" style="background:#fdfcf0;"><svg viewBox="0 0 128 128"><path d="M30 30 L80 30 L100 50 L100 100 L30 100 Z" fill="#fff" stroke="#999" stroke-width="4"/></svg></div> 32px
+                    </div>
+                    <div class="preview-box">
+                        <div class="p-16" style="background:#fdfcf0;"><svg viewBox="0 0 128 128"><path d="M30 30 L80 30 L100 50 L100 100 L30 100 Z" fill="#fff" stroke="#999" stroke-width="8"/></svg></div> 16px
+                    </div>
+                </div>
+            </div>
+            <div class="meta">
+                <span class="label">Origami Fold</span>
+                <p class="description">Tangible paper art metaphor. Tactile and friendly.</p>
+            </div>
+        </div>
+
+        <!-- FEATURE: 10 CHROMATIC ABBERATION -->
+        <div class="icon-card">
+            <span class="badge">10</span>
+            <div class="display-area">
+                <div class="main-icon" style="background:#000;">
+                    <svg viewBox="0 0 128 128">
+                        <text x="62" y="80" font-family="Arial Black" font-size="50" fill="#ff0000" text-anchor="middle" style="mix-blend-mode: screen;">DN</text>
+                        <text x="66" y="80" font-family="Arial Black" font-size="50" fill="#0000ff" text-anchor="middle" style="mix-blend-mode: screen;">DN</text>
+                        <text x="64" y="80" font-family="Arial Black" font-size="50" fill="#ffffff" text-anchor="middle">DN</text>
+                    </svg>
+                </div>
+                <div class="previews">
+                    <div class="preview-box">
+                        <div class="p-32" style="background:#000;"><svg viewBox="0 0 128 128"><text x="64" y="80" font-family="Arial Black" font-size="60" fill="#fff" text-anchor="middle">DN</text></svg></div> 32px
+                    </div>
+                    <div class="preview-box">
+                        <div class="p-16" style="background:#000;"><svg viewBox="0 0 128 128"><text x="64" y="90" font-family="Arial Black" font-size="90" fill="#fff" text-anchor="middle">DN</text></svg></div> 16px
+                    </div>
+                </div>
+            </div>
+            <div class="meta">
+                <span class="label">Chromatic Glitch</span>
+                <p class="description">Digital artifact style with RGB channel separation.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // FEATURE: Micro-interactions for the preview grid
+        document.querySelectorAll('.icon-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const badge = card.querySelector('.badge');
+                badge.style.borderColor = 'var(--accent)';
+                badge.style.color = '#fff';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                const badge = card.querySelector('.badge');
+                badge.style.borderColor = 'var(--border)';
+                badge.style.color = 'var(--text-dim)';
+            });
+
+            // Mock interaction for "downloading"
+            card.addEventListener('click', () => {
+                const label = card.querySelector('.label').innerText;
+                console.log(`Exporting ${label} assets...`);
+                card.style.transform = 'scale(0.98)';
+                setTimeout(() => card.style.transform = '', 100);
+            });
+        });
+    </script>
+</body>
+</html>
