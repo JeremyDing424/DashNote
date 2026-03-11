@@ -31,7 +31,12 @@ const i18n = {
     storageCleaning: 'CLEANING...',
     storageTitleNotes: 'Notes',
     storageTitleSettings: 'Settings',
-    storageTitleOther: 'Other'
+    storageTitleOther: 'Other',
+    storageRemaining: 'Remaining',
+    timeJustNow: 'Just now',
+    timeMinutesAgo: '{count} min ago',
+    timeHoursAgo: '{count} hr ago',
+    timeDaysAgo: '{count} d ago'
   },
   zh: {
     settingsTitle: '设置',
@@ -52,7 +57,12 @@ const i18n = {
     storageCleaning: '清理中...',
     storageTitleNotes: '笔记',
     storageTitleSettings: '设置',
-    storageTitleOther: '其他'
+    storageTitleOther: '其他',
+    storageRemaining: '剩余',
+    timeJustNow: '刚刚',
+    timeMinutesAgo: '{count} 分钟前',
+    timeHoursAgo: '{count} 小时前',
+    timeDaysAgo: '{count} 天前'
   }
 };
 
@@ -215,6 +225,14 @@ function formatBytesCompact(bytes) {
   return `${bytes} B`;
 }
 
+function getCurrentLocale() {
+  return i18n[settings.language] || i18n.en;
+}
+
+function formatI18nCount(template, count) {
+  return template.replace('{count}', count);
+}
+
 async function updateStorageIndicator() {
   const percentEl = document.getElementById('storagePercentText');
   const progressFillEl = document.getElementById('storageProgressFill');
@@ -227,14 +245,15 @@ async function updateStorageIndicator() {
   }
 
   try {
-    const locale = i18n[settings.language] || i18n.en;
+    const locale = getCurrentLocale();
     const { usedBytes, totalBytes, percentage, breakdown } = await getStorageStats();
     const roundedPercent = Math.round(percentage);
+    const remainingBytes = Math.max(totalBytes - usedBytes, 0);
 
     percentEl.textContent = `${roundedPercent}%`;
     progressFillEl.style.width = `${percentage.toFixed(2)}%`;
     usedValueEl.textContent = formatMb(usedBytes);
-    totalValueEl.textContent = `/ ${formatMb(totalBytes)}`;
+    totalValueEl.textContent = `${locale.storageRemaining} ${formatMb(remainingBytes)}`;
     storageCard.classList.toggle('near-limit', percentage >= STORAGE_USAGE_WARNING_THRESHOLD);
     storageCard.title = `${locale.storageTitleNotes} ${formatMb(breakdown.notesBytes)} | ${locale.storageTitleSettings} ${formatMb(breakdown.settingsBytes)} | ${locale.storageTitleOther} ${formatMb(breakdown.otherBytes)}`;
   } catch (error) {
@@ -966,6 +985,7 @@ function formatContent(content) {
 }
 
 function formatDate(isoString) {
+  const locale = getCurrentLocale();
   const date = new Date(isoString);
   const now = new Date();
   const diffMs = now - date;
@@ -973,10 +993,10 @@ function formatDate(isoString) {
   const diffHours = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);
 
-  if (diffMins < 1) return '刚刚';
-  if (diffMins < 60) return `${diffMins} 分钟前`;
-  if (diffHours < 24) return `${diffHours} 小时前`;
-  if (diffDays < 7) return `${diffDays} 天前`;
+  if (diffMins < 1) return locale.timeJustNow;
+  if (diffMins < 60) return formatI18nCount(locale.timeMinutesAgo, diffMins);
+  if (diffHours < 24) return formatI18nCount(locale.timeHoursAgo, diffHours);
+  if (diffDays < 7) return formatI18nCount(locale.timeDaysAgo, diffDays);
 
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');

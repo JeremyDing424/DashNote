@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashNote - Abstract Icons</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f5;
+            --card-bg: #ffffff;
+            --text-color: #1a1a1a;
+            --border-color: #e4e4e7;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin: 0 0 10px 0;
+        }
+
+        p {
+            color: #71717a;
+            margin: 0;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .icon-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .icon-card::after {
+            content: "Copy SVG";
+            position: absolute;
+            bottom: -30px;
+            left: 0;
+            right: 0;
+            background: var(--text-color);
+            color: white;
+            text-align: center;
+            padding: 8px 0;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: bottom 0.2s ease;
+        }
+
+        .icon-card:hover::after {
+            bottom: 0;
+        }
+
+        .icon-wrapper {
+            width: 128px;
+            height: 128px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #52525b;
+        }
+
+        .section-title {
+            width: 100%;
+            max-width: 1200px;
+            margin: 40px 0 20px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-bottom: 2px solid var(--text-color);
+            padding-bottom: 10px;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            background: var(--text-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>DashNote Icons</h1>
+        <p>Abstract geometric concepts. Click to copy SVG.</p>
+    </header>
+
+    <!-- FEATURE: Four-edge geometric shapes section -->
+    <div class="section-title">Four-Edge Geometrics</div>
+    <div class="grid-container" id="geo-grid">
+        
+        <!-- Icon 1: Offset Square -->
+        <div class="icon-card" onclick="copySVG(this)">
+            <div class="icon-wrapper">
+                <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="128" height="128" fill="#ffffff"/>
+                    <rect x="24" y="24" width="60" height="60" stroke="#1a1a1a" stroke-width="12"/>
+                    <path d="M44 104H104V44" stroke="#1a1a1a" stroke-width="12" stroke-linecap="square"/>
+                </svg>
+            </div>
+            <div class="label">Icon 1</div>
+        </div>
+
+        <!-- Icon 2: Divided Diamond -->
+        <div class="icon-card" onclick="copySVG(this)">
+            <div class="icon-wrapper">
+                <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="128" height="128" fill="#ffffff"/>
+                    <path d="M64 16L112 64L64 112L16 64L64 16Z" stroke="#1a1a1a" stroke-width="12"/>
+                    <line x1="16" y1="64" x2="112" y2="64" stroke="#1a1a1a" stroke-width="12"/>
+                </svg>
+            </div>
+            <div class="label">Icon 2</div>
+        </div>
+
+        <!-- Icon 3: Nested Rectangles -->
+        <div class="icon-card" onclick="copySVG(this)">
+            <div class="icon-wrapper">
+                <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="128" height="128" fill="#ffffff"/>
+                    <rect x="20" y="32" width="88" height="64" stroke="#1a1a1a" stroke-width="12"/>
+                    <rect x="48" y="52" width="32" height="24" fill="#1a1a1a"/>
+                </svg>
+            </div>
+            <div class="label">Icon 3</div>
+        </div>
+
+        <!-- Icon 4: Broken Square -->
+        <div class="icon-card" onclick="copySVG(this)">
+            <div class="icon-wrapper">
+                <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="128" height="128" fill="#ffffff"/>
+                    <path d="M24 24H104V60" stroke="#1a1a1a" stroke-width="12" stroke-linecap="square"/>
+                    <path d="M104 104H24V68" stroke="#1a1a1a" stroke-width="12" stroke-linecap="square"/>
+                    <rect x="48" y="48" width="32" height="32" fill="#1a1a1a"/>
+                </svg>
+            </div>
+            <div class="label">Icon 4</div>
+        </div>
+
+        <!-- Icon 5: Dynamic Quadrilateral -->
+        <div class="icon-card" onclick="copySVG(this)">
+            <div class="icon-wrapper">
+                <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="128" height="128" fill="#ffffff"/>
+                    <path d="M20 100L40 28H108L88 100H20Z" stroke="#1a1a1a" stroke-width="12" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="label">Icon 5</div>
+        </div>
+
+    </div>
+
+    <!-- FEATURE: Horizontal line variations section -->
+    <div class="section-title">Horizontal Line Variations</div>
+    <div class="grid-container" id="dash-grid">
+
+        <!-- Icon 6: Bold Dash & Dot -->
+        <div class="icon-card" onclick="copySVG(this)">
+            <div class="icon-wrapper">
+                <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="128" height="128" fill="#ffffff"/>
+                    <line x1="20" y1="64" x2="80" y2="64" stroke="#1a1a1a" stroke-width="16" stroke-linecap="round"/>
+                    <circle cx="100" cy="64" r="8" fill="#1a1a1a"/>
+                </svg>
+            </div>
+            <div class="label">Icon 6</div>
+        </div>
+
+        <!-- Icon 7: Stepped Dash -->
+        <div class="icon-card" onclick="copySVG(this)">
+            <div class="icon-wrapper">
+                <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="128" height="128" fill="#ffffff"/>
+                    <path d="M16 80H56V48H112" stroke="#1a1a1a" stroke-width="16" stroke-linecap="square"/>
+                </svg>
+            </div>
+            <div class="label">Icon 7</div>
+        </div>
+
+        <!-- Icon 8: Parallel Dashes -->
+        <div class="icon-card" onclick="copySVG(this)">
+            <div class="icon-wrapper">
+                <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="128" height="128" fill="#ffffff"/>
+                    <line x1="20" y1="48" x2="108" y2="48" stroke="#1a1a1a" stroke-width="14"/>
+                    <line x1="40" y1="80" x2="108" y2="80" stroke="#1a1a1a" stroke-width="14"/>
+                </svg>
+            </div>
+            <div class="label">Icon 8</div>
+        </div>
+
+        <!-- Icon 9: Dash Brackets -->
+        <div class="icon-card" onclick="copySVG(this)">
+            <div class="icon-wrapper">
+                <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="128" height="128" fill="#ffffff"/>
+                    <path d="M32 32V64H96V96" stroke="#1a1a1a" stroke-width="16" stroke-linecap="square"/>
+                </svg>
+            </div>
+            <div class="label">Icon 9</div>
+        </div>
+
+        <!-- Icon 10: Sliced Dash -->
+        <div class="icon-card" onclick="copySVG(this)">
+            <div class="icon-wrapper">
+                <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="128" height="128" fill="#ffffff"/>
+                    <path d="M16 64H50" stroke="#1a1a1a" stroke-width="16" stroke-linecap="square"/>
+                    <path d="M78 64H112" stroke="#1a1a1a" stroke-width="16" stroke-linecap="square"/>
+                    <path d="M64 32L64 96" stroke="#1a1a1a" stroke-width="8"/>
+                </svg>
+            </div>
+            <div class="label">Icon 10</div>
+        </div>
+
+    </div>
+
+    <div class="toast" id="toast">SVG Copied to clipboard!</div>
+
+    <!-- FEATURE: Interaction script to copy SVG code -->
+    <script>
+        function copySVG(element) {
+            const svgElement = element.querySelector('svg');
+            const svgString = new XMLSerializer().serializeToString(svgElement);
+            
+            navigator.clipboard.writeText(svgString).then(() => {
+                showToast();
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+
+        let toastTimeout;
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

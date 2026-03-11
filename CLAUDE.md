@@ -257,7 +257,50 @@ MarkdownConverter.markdownToHtml(markdown)
 
 ---
 
-**最后更新**：2026-03-05
+## Gemini Designer 调用问题排查记录
+
+### 问题现象
+调用 `gemini-designer` skill 时出现超时错误（退出码 28）
+
+### 根本原因
+1. **中文提示词过长**：复杂的中文描述会导致请求体积过大，增加处理时间
+2. **默认超时设置不足**：原始设置为 30 秒连接超时 + 120 秒最大执行时间
+
+### 解决方案
+1. **增加超时时间**（已完成）：
+   - 修改文件：`~/.claude/skills/gemini-designer/scripts/ask_gemini.sh`
+   - 连接超时：30 秒 → 60 秒
+   - 最大执行时间：120 秒 → 240 秒
+
+2. **优化提示词**（推荐做法）：
+   - 使用简洁的英文提示词代替复杂的中文描述
+   - 避免过长的需求列表，提炼核心要点
+   - 示例对比：
+     ```bash
+     # ❌ 过长的中文提示（容易超时）
+     "为 DashNote Chrome 扩展设计 10 个不同的 128x128 像素图标变体。要求：1. 白色背景... 2. 中间是突出的黑色线条... 3. 形状可以是..."
+
+     # ✅ 简洁的英文提示（成功率高）
+     "Create 10 different 128x128px SVG icon designs for DashNote. White background, bold black geometric shapes, clean minimal lines."
+     ```
+
+3. **测试 API 连接**：
+   ```bash
+   # 如果遇到问题，先测试基础连接
+   api_key=$(cat ~/.config/gemini-designer/api_key | tr -d '[:space:]')
+   curl -s -X POST "https://linkapi.ai/v1/chat/completions" \
+     -H "Authorization: Bearer ${api_key}" \
+     -d '{"model":"gemini-3.1-pro-preview","messages":[{"role":"user","content":"Hello"}]}'
+   ```
+
+### 经验总结
+- Gemini API 是可用的，关键在于请求优化
+- 遇到超时问题时，优先简化提示词，而不是无限增加超时时间
+- 英文提示词通常比中文更高效（token 数量更少）
+
+---
+
+**最后更新**：2026-03-11
 **版本**：2.0（重构后）
 **状态**：稳定运行
 

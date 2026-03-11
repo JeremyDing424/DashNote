@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- Background with rounded corners -->
+  <rect width="128" height="128" rx="24" ry="24" fill="#1a1a1a"/>
+
+  <!-- Notebook body -->
+  <rect x="28" y="24" width="60" height="72" rx="6" ry="6" fill="none" stroke="#ffffff" stroke-width="4"/>
+
+  <!-- Spine lines on left -->
+  <rect x="28" y="24" width="10" height="72" rx="4" ry="4" fill="#ffffff" opacity="0.15"/>
+
+  <!-- Note lines -->
+  <line x1="46" y1="44" x2="80" y2="44" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="46" y1="56" x2="80" y2="56" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="46" y1="68" x2="68" y2="68" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Lightning bolt (quick/dash) -->
+  <polygon points="82,58 72,76 79,76 70,98 90,74 81,74 92,58" fill="#ffffff"/>
+</svg>

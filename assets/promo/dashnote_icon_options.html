@@ -1,0 +1,217 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DashNote Icon Options</title>
+  <style>
+    :root {
+      --bg: #f4f4f2;
+      --card: #ffffff;
+      --line: #1a1a1a;
+      --text: #1a1a1a;
+      --muted: #666666;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 32px;
+      background: linear-gradient(180deg, #fafaf9 0%, var(--bg) 100%);
+      color: var(--text);
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    p {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 16px;
+    }
+
+    .item {
+      background: var(--card);
+      border: 1px solid #e6e6e6;
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .label {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--text);
+      letter-spacing: 0.2px;
+    }
+
+    svg {
+      width: 128px;
+      height: 128px;
+      display: block;
+      background: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <h1>DashNote Chrome 扩展图标方案</h1>
+  <p>10 个 128x128 SVG 变体（白底 + 黑色几何线条），用于对比选择。</p>
+
+  <section class="grid">
+    <figure class="item">
+      <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-label="Icon 1">
+        <rect width="128" height="128" fill="#ffffff"/>
+        <g transform="rotate(45 64 64)" stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="34" y="34" width="60" height="60" rx="5"/>
+          <line x1="46" y1="49" x2="82" y2="49"/>
+          <line x1="46" y1="61" x2="82" y2="61"/>
+          <line x1="46" y1="73" x2="76" y2="73"/>
+        </g>
+      </svg>
+      <figcaption class="label">Icon 1</figcaption>
+    </figure>
+
+    <figure class="item">
+      <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-label="Icon 2">
+        <rect width="128" height="128" fill="#ffffff"/>
+        <g transform="rotate(30 64 64)" stroke="#1a1a1a" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="36" y="36" width="56" height="56" rx="6"/>
+          <line x1="48" y1="50" x2="80" y2="50"/>
+          <line x1="48" y1="62" x2="80" y2="62"/>
+          <line x1="48" y1="74" x2="72" y2="74"/>
+        </g>
+      </svg>
+      <figcaption class="label">Icon 2</figcaption>
+    </figure>
+
+    <figure class="item">
+      <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-label="Icon 3">
+        <rect width="128" height="128" fill="#ffffff"/>
+        <g stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="28" y="24" width="72" height="80" rx="8"/>
+          <line x1="40" y1="43" x2="88" y2="43"/>
+          <line x1="40" y1="57" x2="88" y2="57"/>
+          <line x1="40" y1="71" x2="80" y2="71"/>
+        </g>
+      </svg>
+      <figcaption class="label">Icon 3</figcaption>
+    </figure>
+
+    <figure class="item">
+      <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-label="Icon 4">
+        <rect width="128" height="128" fill="#ffffff"/>
+        <g stroke="#1a1a1a" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="26" width="68" height="76" rx="10"/>
+          <line x1="42" y1="46" x2="86" y2="46"/>
+          <line x1="42" y1="60" x2="86" y2="60"/>
+          <line x1="42" y1="74" x2="74" y2="74"/>
+        </g>
+      </svg>
+      <figcaption class="label">Icon 4</figcaption>
+    </figure>
+
+    <figure class="item">
+      <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-label="Icon 5">
+        <rect width="128" height="128" fill="#ffffff"/>
+        <g stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="26" y="22" width="76" height="84" rx="8"/>
+          <line x1="38" y1="22" x2="38" y2="106"/>
+          <line x1="46" y1="42" x2="90" y2="42"/>
+          <line x1="46" y1="56" x2="90" y2="56"/>
+          <line x1="46" y1="70" x2="82" y2="70"/>
+        </g>
+      </svg>
+      <figcaption class="label">Icon 5</figcaption>
+    </figure>
+
+    <figure class="item">
+      <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-label="Icon 6">
+        <rect width="128" height="128" fill="#ffffff"/>
+        <g stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M34 22h46l18 18v66H34z"/>
+          <path d="M80 22v20h18"/>
+          <line x1="44" y1="56" x2="88" y2="56"/>
+          <line x1="44" y1="70" x2="88" y2="70"/>
+          <line x1="44" y1="84" x2="78" y2="84"/>
+        </g>
+      </svg>
+      <figcaption class="label">Icon 6</figcaption>
+    </figure>
+
+    <figure class="item">
+      <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-label="Icon 7">
+        <rect width="128" height="128" fill="#ffffff"/>
+        <g stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M26 38l38-16 38 16-38 16z"/>
+          <path d="M26 38v44l38 24 38-24V38"/>
+          <line x1="64" y1="54" x2="64" y2="106"/>
+          <line x1="44" y1="64" x2="58" y2="72"/>
+          <line x1="84" y1="64" x2="70" y2="72"/>
+        </g>
+      </svg>
+      <figcaption class="label">Icon 7</figcaption>
+    </figure>
+
+    <figure class="item">
+      <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-label="Icon 8">
+        <rect width="128" height="128" fill="#ffffff"/>
+        <g stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M34 28h60v72H34z"/>
+          <path d="M34 40c10 8 18 8 30 0s20-8 30 0"/>
+          <path d="M34 60c10 8 18 8 30 0s20-8 30 0"/>
+          <path d="M34 80c10 8 18 8 30 0s20-8 30 0"/>
+        </g>
+      </svg>
+      <figcaption class="label">Icon 8</figcaption>
+    </figure>
+
+    <figure class="item">
+      <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-label="Icon 9">
+        <rect width="128" height="128" fill="#ffffff"/>
+        <g stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M64 18l42 42-42 50L22 60z"/>
+          <line x1="64" y1="18" x2="64" y2="110"/>
+          <line x1="38" y1="56" x2="58" y2="56"/>
+          <line x1="70" y1="56" x2="90" y2="56"/>
+          <line x1="42" y1="70" x2="56" y2="70"/>
+          <line x1="72" y1="70" x2="86" y2="70"/>
+        </g>
+      </svg>
+      <figcaption class="label">Icon 9</figcaption>
+    </figure>
+
+    <figure class="item">
+      <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-label="Icon 10">
+        <rect width="128" height="128" fill="#ffffff"/>
+        <g stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="24" y="20" width="80" height="88" rx="10"/>
+          <path d="M24 42h80"/>
+          <path d="M64 42v66"/>
+          <path d="M64 42l40 66"/>
+          <line x1="34" y1="56" x2="54" y2="56"/>
+          <line x1="34" y1="70" x2="54" y2="70"/>
+          <line x1="34" y1="84" x2="48" y2="84"/>
+        </g>
+      </svg>
+      <figcaption class="label">Icon 10</figcaption>
+    </figure>
+  </section>
+</body>
+</html>

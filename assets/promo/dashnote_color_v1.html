@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colored Note Icons</title>
+    <style>
+        :root {
+            --bg-color: #0f1115;
+            --card-bg: #1c1f26;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            
+            /* Note Colors */
+            --note-yellow: #fbbf24;
+            --note-blue: #3b82f6;
+            --note-green: #10b981;
+            --note-red: #ef4444;
+            --note-purple: #8b5cf6;
+            --note-orange: #f97316;
+            --note-teal: #14b8a6;
+            --note-pink: #ec4899;
+            --note-gray: #64748b;
+            --note-indigo: #6366f1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        /* FEATURE: Main header for context */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* FEATURE: Grid layout for note icons */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        @media (min-width: 600px) {
+            .icon-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 900px) {
+            .icon-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        /* FEATURE: Interactive note cards */
+        .note-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .note-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: var(--icon-color);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .note-card:hover::before {
+            opacity: 1;
+        }
+
+        .note-card.active {
+            transform: scale(0.95);
+            background-color: #2a2d36;
+        }
+
+        .note-icon {
+            width: 48px;
+            height: 48px;
+            transition: transform 0.3s ease;
+        }
+
+        .note-card:hover .note-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .note-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Color classes */
+        .c-yellow { --icon-color: var(--note-yellow); }
+        .c-blue { --icon-color: var(--note-blue); }
+        .c-green { --icon-color: var(--note-green); }
+        .c-red { --icon-color: var(--note-red); }
+        .c-purple { --icon-color: var(--note-purple); }
+        .c-orange { --icon-color: var(--note-orange); }
+        .c-teal { --icon-color: var(--note-teal); }
+        .c-pink { --icon-color: var(--note-pink); }
+        .c-gray { --icon-color: var(--note-gray); }
+        .c-indigo { --icon-color: var(--note-indigo); }
+
+        /* FEATURE: Toast notification system */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 1000;
+        }
+
+        .toast {
+            background-color: var(--text-main);
+            color: var(--bg-color);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards, fadeOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards 2.7s;
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Workspace Notebooks</h1>
+        <p>Select a category to view recent documents</p>
+    </header>
+
+    <div class="icon-grid" id="grid">
+        <!-- Icons generated via JS for DRYness, but fully functional -->
+    </div>
+
+    <div class="toast-container" id="toasts"></div>
+
+    <script>
+        // Data for the 10 note icons
+        const notesData = [
+            { id: 'personal', label: 'Personal Thoughts', colorClass: 'c-yellow', colorHex: '#fbbf24' },
+            { id: 'work', label: 'Meeting Minutes', colorClass: 'c-blue', colorHex: '#3b82f6' },
+            { id: 'ideas', label: 'Brainstorming', colorClass: 'c-green', colorHex: '#10b981' },
+            { id: 'urgent', label: 'Urgent Action Items', colorClass: 'c-red', colorHex: '#ef4444' },
+            { id: 'creative', label: 'Design Drafts', colorClass: 'c-purple', colorHex: '#8b5cf6' },
+            { id: 'tasks', label: 'Weekly To-Do', colorClass: 'c-orange', colorHex: '#f97316' },
+            { id: 'code', label: 'Code Snippets', colorClass: 'c-teal', colorHex: '#14b8a6' },
+            { id: 'inspo', label: 'Moodboards', colorClass: 'c-pink', colorHex: '#ec4899' },
+            { id: 'archive', label: 'Archived Docs', colorClass: 'c-gray', colorHex: '#64748b' },
+            { id: 'journal', label: 'Daily Journal', colorClass: 'c-indigo', colorHex: '#6366f1' }
+        ];
+
+        // FEATURE: SVG Icon template generator
+        const getSvgIcon = (colorHex) => `
+            <svg class="note-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" fill="${colorHex}" fill-opacity="0.2" stroke="${colorHex}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14 2V8H20" stroke="${colorHex}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 13H8" stroke="${colorHex}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 17H8" stroke="${colorHex}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 9H8" stroke="${colorHex}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        `;
+
+        const grid = document.getElementById('grid');
+        const toastContainer = document.getElementById('toasts');
+
+        // FEATURE: Render icons and bind interactions
+        notesData.forEach(note => {
+            const card = document.createElement('div');
+            card.className = `note-card ${note.colorClass}`;
+            card.innerHTML = `
+                ${getSvgIcon(note.colorHex)}
+                <span class="note-label">${note.label}</span>
+            `;
+
+            card.addEventListener('mousedown', () => card.classList.add('active'));
+            card.addEventListener('mouseup', () => {
+                card.classList.remove('active');
+                showToast(`Opening "${note.label}"...`);
+            });
+            card.addEventListener('mouseleave', () => card.classList.remove('active'));
+
+            grid.appendChild(card);
+        });
+
+        // FEATURE: Toast notification logic
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            toastContainer.appendChild(toast);
+
+            // Remove element after animation completes
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

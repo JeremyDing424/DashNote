@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Note Icons</title>
+    <style>
+        :root {
+            --bg-color: #f0f0f5;
+            --card-bg: #ffffff;
+            --text-main: #111111;
+            --text-muted: #666666;
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4rem 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            margin-bottom: 1rem;
+        }
+
+        p.subtitle {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* FEATURE: Grid Layout for displaying the icons evenly */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* FEATURE: Interactive Icon Cards with hover states and click-to-copy functionality */
+        .icon-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02), 0 10px 15px rgba(0, 0, 0, 0.03);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 20px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .icon-card::after {
+            content: 'Copy SVG';
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-main);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .icon-card:hover::after {
+            bottom: 12px;
+            opacity: 1;
+        }
+
+        /* Essential Icon Styling: 128px, white bg (inherited from card/svg fill), black lines */
+        .icon-card svg {
+            width: 128px;
+            height: 128px;
+            stroke: #000000;
+            stroke-width: 4px;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: #ffffff;
+            transition: transform 0.3s ease;
+        }
+
+        .icon-card:hover svg {
+            transform: scale(1.05);
+        }
+
+        .icon-label {
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: capitalize;
+            opacity: 0;
+            height: 0;
+            transition: var(--transition);
+        }
+
+        /* FEATURE: Toast Notification for feedback after copying */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: var(--text-main);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Note & Paper Icons</h1>
+        <p class="subtitle">A collection of 10 minimalist, line-art note icons. Click any icon to copy its SVG code to your clipboard.</p>
+    </header>
+
+    <!-- FEATURE: Icon Grid Container -->
+    <div class="icon-grid" id="iconGrid">
+        
+        <!-- Icon 1: Folded Page -->
+        <div class="icon-card" aria-label="Folded Page">
+            <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                <path d="M34 16 H76 L102 42 V112 H34 Z"/>
+                <path d="M76 16 V42 H102"/>
+                <line x1="50" y1="64" x2="86" y2="64"/>
+                <line x1="50" y1="84" x2="74" y2="84"/>
+            </svg>
+        </div>
+
+        <!-- Icon 2: Spiral Notebook -->
+        <div class="icon-card" aria-label="Spiral Notebook">
+            <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                <rect x="36" y="16" width="70" height="96" rx="4"/>
+                <path d="M26 28 C26 28, 42 22, 42 32 C42 42, 26 36, 26 36" fill="none"/>
+                <path d="M26 48 C26 48, 42 42, 42 52 C42 62, 26 56, 26 56" fill="none"/>
+                <path d="M26 68 C26 68, 42 62, 42 72 C42 82, 26 76, 26 76" fill="none"/>
+                <path d="M26 88 C26 88, 42 82, 42 92 C42 102, 26 96, 26 96" fill="none"/>
+                <line x1="52" y1="36" x2="88" y2="36"/>
+                <line x1="52" y1="56" x2="88" y2="56"/>
+            </svg>
+        </div>
+
+        <!-- Icon 3: Paper & Pen -->
+        <div class="icon-card" aria-label="Paper & Pen">
+            <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                <rect x="24" y="20" width="64" height="88" rx="2"/>
+                <path d="M96 24 L108 36 L64 80 L48 84 L52 68 Z"/>
+                <line x1="90" y1="30" x2="102" y2="42"/>
+            </svg>
+        </div>
+
+        <!-- Icon 4: Sticky Note -->
+        <div class="icon-card" aria-label="Sticky Note">
+            <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 24 H104 V84 C104 84, 84 104, 84 104 H24 Z"/>
+                <path d="M104 84 H84 V104" fill="#ffffff"/>
+                <line x1="40" y1="48" x2="88" y2="48"/>
+                <line x1="40" y1="68" x2="72" y2="68"/>
+            </svg>
+        </div>
+
+        <!-- Icon 5: Checklist -->
+        <div class="icon-card" aria-label="Checklist">
+            <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                <rect x="24" y="16" width="80" height="96" rx="6"/>
+                <rect x="40" y="36" width="12" height="12"/>
+                <line x1="64" y1="42" x2="92" y2="42"/>
+                <rect x="40" y="58" width="12" height="12"/>
+                <line x1="64" y1="64" x2="92" y2="64"/>
+                <path d="M38 84 L44 90 L54 78" fill="none"/>
+                <line x1="64" y1="86" x2="80" y2="86"/>
+            </svg>
+        </div>
+
+        <!-- Icon 6: Bookmark Note -->
+        <div class="icon-card" aria-label="Bookmark Note">
+            <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                <rect x="24" y="16" width="80" height="96" rx="4"/>
+                <path d="M44 16 V64 L56 52 L68 64 V16" fill="#ffffff"/>
+                <line x1="40" y1="84" x2="88" y2="84"/>
+            </svg>
+        </div>
+
+        <!-- Icon 7: Composition Book -->
+        <div class="icon-card" aria-label="Composition Book">
+            <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                <rect x="24" y="16" width="80" height="96" rx="4"/>
+                <line x1="44" y1="16" x2="44" y2="112"/>
+                <rect x="60" y="44" width="32" height="24" rx="2"/>
+            </svg>
+        </div>
+
+        <!-- Icon 8: Add Note -->
+        <div class="icon-card" aria-label="Add Note">
+            <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                <rect x="28" y="16" width="72" height="96" rx="4"/>
+                <line x1="64" y1="46" x2="64" y2="82"/>
+                <line x1="46" y1="64" x2="82" y2="64"/>
+            </svg>
+        </div>
+
+        <!-- Icon 9: Pinned Note -->
+        <div class="icon-card" aria-label="Pinned Note">
+            <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                <rect x="28" y="40" width="72" height="72" rx="2"/>
+                <circle cx="64" cy="22" r="10"/>
+                <line x1="64" y1="32" x2="64" y2="48"/>
+                <line x1="44" y1="64" x2="84" y2="64"/>
+                <line x1="44" y1="84" x2="70" y2="84"/>
+            </svg>
+        </div>
+
+        <!-- Icon 10: Document Folder -->
+        <div class="icon-card" aria-label="Document Folder">
+            <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                <path d="M28 24 H90 V46" fill="none"/>
+                <line x1="44" y1="36" x2="74" y2="36"/>
+                <path d="M16 46 H52 L64 60 H112 V112 H16 Z"/>
+            </svg>
+        </div>
+
+    </div>
+
+    <div class="toast" id="toast">SVG Copied to Clipboard!</div>
+
+    <script>
+        // FEATURE: Interaction Logic
+        // Attach click listeners to cards to copy the inner SVG HTML
+        
+        const cards = document.querySelectorAll('.icon-card');
+        const toast = document.getElementById('toast');
+        let toastTimeout;
+
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const svgCode = card.querySelector('svg').outerHTML;
+                
+                navigator.clipboard.writeText(svgCode).then(() => {
+                    showToast();
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                });
+            });
+        });
+
+        function showToast() {
+            clearTimeout(toastTimeout);
+            toast.classList.add('show');
+            
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>

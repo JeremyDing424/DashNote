@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DashNote - Icon Explorations</title>
+<style>
+    :root {
+        --bg-color: #f4f4f5;
+        --card-bg: #ffffff;
+        --ink: #1a1a1a;
+        --text-muted: #71717a;
+        --border-color: #e4e4e7;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--ink);
+        padding: 4rem 2rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header {
+        text-align: center;
+        margin-bottom: 4rem;
+        max-width: 600px;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        letter-spacing: -0.05em;
+        margin-bottom: 1rem;
+    }
+
+    p.subtitle {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.5;
+    }
+
+    /* FEATURE: Grid layout for icon display */
+    .icon-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 2rem;
+        width: 100%;
+        max-width: 1200px;
+    }
+
+    /* FEATURE: Interactive icon cards with copy functionality */
+    .icon-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 2rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .icon-card:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 12px 24px -8px rgba(26, 26, 26, 0.1);
+        border-color: var(--ink);
+    }
+
+    .icon-card:active {
+        transform: translateY(0) scale(0.98);
+    }
+
+    .svg-container {
+        width: 128px;
+        height: 128px;
+        margin-bottom: 1.5rem;
+        background-color: #ffffff; /* Explicit white bg as requested */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .svg-container svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .icon-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--ink);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    /* FEATURE: Toast notification system */
+    #toast-container {
+        position: fixed;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        z-index: 100;
+        pointer-events: none;
+    }
+
+    .toast {
+        background: var(--ink);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 99px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes slideUpFade {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>DashNote Explorations</h1>
+    <p class="subtitle">A collection of 10 minimalist, high-contrast SVG icons designed for the DashNote Chrome extension. Click any icon to copy its SVG code.</p>
+</header>
+
+<!-- FEATURE: Icon Grid -->
+<main class="icon-grid">
+    
+    <div class="icon-card" data-label="Icon 1">
+        <div class="svg-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+                <rect x="24" y="24" width="80" height="80" fill="none" stroke="#1a1a1a" stroke-width="14" stroke-linecap="square"/>
+                <line x1="36" y1="92" x2="92" y2="36" stroke="#1a1a1a" stroke-width="14" stroke-linecap="square"/>
+            </svg>
+        </div>
+        <span class="icon-label">Icon 1</span>
+    </div>
+
+    <div class="icon-card" data-label="Icon 2">
+        <div class="svg-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+                <polygon points="24,24 76,24 104,52 104,104 24,104" fill="none" stroke="#1a1a1a" stroke-width="12" stroke-linejoin="miter"/>
+                <polyline points="76,24 76,52 104,52" fill="none" stroke="#1a1a1a" stroke-width="12" stroke-linejoin="miter"/>
+                <line x1="44" y1="64" x2="64" y2="64" stroke="#1a1a1a" stroke-width="12" stroke-linecap="square"/>
+            </svg>
+        </div>
+        <span class="icon-label">Icon 2</span>
+    </div>
+
+    <div class="icon-card" data-label="Icon 3">
+        <div class="svg-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+                <polygon points="64,16 112,64 64,112 16,64" fill="none" stroke="#1a1a1a" stroke-width="14" stroke-linejoin="miter"/>
+                <line x1="16" y1="64" x2="112" y2="64" stroke="#1a1a1a" stroke-width="14" stroke-linecap="square"/>
+            </svg>
+        </div>
+        <span class="icon-label">Icon 3</span>
+    </div>
+
+    <div class="icon-card" data-label="Icon 4">
+        <div class="svg-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+                <rect x="20" y="20" width="56" height="56" fill="none" stroke="#1a1a1a" stroke-width="12" stroke-linecap="square"/>
+                <rect x="52" y="52" width="56" height="56" fill="none" stroke="#1a1a1a" stroke-width="12" stroke-linecap="square"/>
+            </svg>
+        </div>
+        <span class="icon-label">Icon 4</span>
+    </div>
+
+    <div class="icon-card" data-label="Icon 5">
+        <div class="svg-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+                <line x1="24" y1="36" x2="104" y2="36" stroke="#1a1a1a" stroke-width="16" stroke-linecap="square"/>
+                <line x1="24" y1="64" x2="84" y2="64" stroke="#1a1a1a" stroke-width="16" stroke-linecap="square"/>
+                <line x1="24" y1="92" x2="56" y2="92" stroke="#1a1a1a" stroke-width="16" stroke-linecap="square"/>
+            </svg>
+        </div>
+        <span class="icon-label">Icon 5</span>
+    </div>
+
+    <div class="icon-card" data-label="Icon 6">
+        <div class="svg-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+                <rect x="24" y="24" width="80" height="80" fill="none" stroke="#1a1a1a" stroke-width="12" stroke-linecap="square"/>
+                <line x1="44" y1="64" x2="84" y2="64" stroke="#1a1a1a" stroke-width="16" stroke-linecap="square"/>
+            </svg>
+        </div>
+        <span class="icon-label">Icon 6</span>
+    </div>
+
+    <div class="icon-card" data-label="Icon 7">
+        <div class="svg-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+                <g transform="rotate(45 64 64)">
+                    <rect x="32" y="32" width="64" height="64" fill="none" stroke="#1a1a1a" stroke-width="14"/>
+                    <rect x="32" y="32" width="64" height="32" fill="#1a1a1a"/>
+                </g>
+            </svg>
+        </div>
+        <span class="icon-label">Icon 7</span>
+    </div>
+
+    <div class="icon-card" data-label="Icon 8">
+        <div class="svg-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+                <rect x="32" y="24" width="20" height="80" fill="#1a1a1a"/>
+                <rect x="76" y="56" width="20" height="48" fill="#1a1a1a"/>
+                <rect x="76" y="24" width="20" height="16" fill="#1a1a1a"/>
+            </svg>
+        </div>
+        <span class="icon-label">Icon 8</span>
+    </div>
+
+    <div class="icon-card" data-label="Icon 9">
+        <div class="svg-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+                <polyline points="40,72 40,40 72,40" fill="none" stroke="#1a1a1a" stroke-width="16" stroke-linejoin="miter"/>
+                <polyline points="88,56 88,88 56,88" fill="none" stroke="#1a1a1a" stroke-width="16" stroke-linejoin="miter"/>
+                <circle cx="64" cy="64" r="8" fill="#1a1a1a"/>
+            </svg>
+        </div>
+        <span class="icon-label">Icon 9</span>
+    </div>
+
+    <div class="icon-card" data-label="Icon 10">
+        <div class="svg-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+                <polygon points="20,48 84,16 108,80 44,112" fill="none" stroke="#1a1a1a" stroke-width="12" stroke-linejoin="miter"/>
+                <line x1="36" y1="72" x2="68" y2="56" stroke="#1a1a1a" stroke-width="12" stroke-linecap="square"/>
+                <line x1="44" y1="88" x2="60" y2="80" stroke="#1a1a1a" stroke-width="12" stroke-linecap="square"/>
+            </svg>
+        </div>
+        <span class="icon-label">Icon 10</span>
+    </div>
+
+</main>
+
+<div id="toast-container"></div>
+
+<script>
+    // FEATURE: Interactive logic to copy SVG code to clipboard
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.icon-card');
+        const toastContainer = document.getElementById('toast-container');
+
+        const showToast = (message) => {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        };
+
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const svgCode = card.querySelector('svg').outerHTML;
+                const label = card.getAttribute('data-label');
+                
+                navigator.clipboard.writeText(svgCode).then(() => {
+                    showToast(`Copied ${label} SVG`);
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    showToast(`Failed to copy`);
+                });
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

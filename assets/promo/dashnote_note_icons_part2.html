@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abstract Geometric Note Icons</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f5;
+            --text-color: #18181b;
+            --card-bg: #ffffff;
+            --border-color: #e4e4e7;
+            --hover-color: #000000;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            color: #71717a;
+            font-size: 1.1rem;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .icon-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border-color: var(--hover-color);
+        }
+
+        .icon-card svg {
+            width: 128px;
+            height: 128px;
+            background: #ffffff; /* Explicit white bg as requested */
+            transition: transform 0.3s ease;
+        }
+
+        .icon-card:hover svg {
+            transform: scale(1.05);
+        }
+
+        .icon-card .label {
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #52525b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(24, 24, 27, 0.8);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 100;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 3rem;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-content svg {
+            width: 256px;
+            height: 256px;
+            background: #ffffff;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #a1a1aa;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #000;
+        }
+
+        .action-btn {
+            margin-top: 2rem;
+            padding: 0.75rem 1.5rem;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #27272a;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #000;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 999px;
+            font-weight: 500;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 200;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FEATURE: Header section introducing the icon set -->
+    <header>
+        <h1>Geometric Series II</h1>
+        <p>A collection of 10 abstract, geometry-driven note and document icons. Designed on a 128px grid with stark black lines on solid white backgrounds.</p>
+    </header>
+
+    <!-- FEATURE: Grid layout displaying the icons -->
+    <main class="icon-grid" id="iconGrid">
+        
+        <div class="icon-card" aria-label="View Data Node Note">
+            <svg viewBox="0 0 128 128" fill="#ffffff" stroke="#000000" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter">
+                <rect x="20" y="16" width="88" height="96" />
+                <circle cx="44" cy="44" r="8" />
+                <circle cx="84" cy="84" r="8" />
+                <path d="M44 52 L44 84 L76 84" fill="none" />
+                <path d="M84 44 L84 76" fill="none" />
+            </svg>
+            <span class="label">Node Map</span>
+        </div>
+
+        <div class="icon-card" aria-label="View Fragmented Page">
+            <svg viewBox="0 0 128 128" fill="#ffffff" stroke="#000000" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter">
+                <rect x="24" y="16" width="80" height="96" />
+                <path d="M24 64 L104 32" fill="none" />
+                <path d="M64 44 L64 112" fill="none" />
+                <path d="M24 96 L64 80" fill="none" />
+            </svg>
+            <span class="label">Fragments</span>
+        </div>
+
+        <div class="icon-card" aria-label="View Concentric Rectangles">
+            <svg viewBox="0 0 128 128" fill="#ffffff" stroke="#000000" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter">
+                <rect x="16" y="32" width="72" height="80" />
+                <rect x="40" y="16" width="72" height="80" fill="none" />
+                <path d="M32 56 L72 56 M32 76 L64 76" fill="none" />
+            </svg>
+            <span class="label">Shifted Stack</span>
+        </div>
+
+        <div class="icon-card" aria-label="View Spiral Abstract">
+            <svg viewBox="0 0 128 128" fill="#ffffff" stroke="#000000" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter">
+                <rect x="40" y="16" width="64" height="96" />
+                <circle cx="24" cy="32" r="6" />
+                <circle cx="24" cy="64" r="6" />
+                <circle cx="24" cy="96" r="6" />
+                <path d="M30 32 L40 32 M30 64 L40 64 M30 96 L40 96" fill="none" />
+                <path d="M56 48 L88 48 M56 80 L76 80" fill="none" stroke-width="8"/>
+            </svg>
+            <span class="label">Bound</span>
+        </div>
+
+        <div class="icon-card" aria-label="View Origami Note">
+            <svg viewBox="0 0 128 128" fill="#ffffff" stroke="#000000" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter">
+                <polygon points="24,16 104,16 104,80 64,112 24,112" />
+                <polygon points="104,80 64,80 64,112" fill="none" />
+                <path d="M44 48 L84 48 M44 64 L64 64" fill="none" />
+            </svg>
+            <span class="label">Folded Base</span>
+        </div>
+
+        <div class="icon-card" aria-label="View Tabbed Metric">
+            <svg viewBox="0 0 128 128" fill="#ffffff" stroke="#000000" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter">
+                <path d="M16 40 L48 40 L56 24 L112 24 L112 104 L16 104 Z" />
+                <rect x="36" y="56" width="16" height="32" fill="#000" />
+                <rect x="60" y="72" width="16" height="16" fill="#000" />
+                <rect x="84" y="48" width="16" height="40" fill="#000" />
+            </svg>
+            <span class="label">Metrics Tab</span>
+        </div>
+
+        <div class="icon-card" aria-label="View Target Note">
+            <svg viewBox="0 0 128 128" fill="#ffffff" stroke="#000000" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter">
+                <rect x="24" y="16" width="80" height="96" />
+                <circle cx="64" cy="64" r="24" fill="none" />
+                <circle cx="64" cy="64" r="8" fill="#000" />
+                <path d="M64 16 L64 32 M64 96 L64 112 M24 64 L40 64 M88 64 L104 64" fill="none" />
+            </svg>
+            <span class="label">Focus Point</span>
+        </div>
+
+        <div class="icon-card" aria-label="View Circuit Document">
+            <svg viewBox="0 0 128 128" fill="#ffffff" stroke="#000000" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter">
+                <rect x="20" y="16" width="88" height="96" />
+                <path d="M20 48 L56 48 L56 72 L88 72" fill="none" />
+                <rect x="84" y="68" width="8" height="8" fill="#000" />
+                <path d="M72 16 L72 40 L108 40" fill="none" />
+                <rect x="68" y="36" width="8" height="8" fill="#000" />
+            </svg>
+            <span class="label">Logic Path</span>
+        </div>
+
+        <div class="icon-card" aria-label="View Minimalist Stack">
+            <svg viewBox="0 0 128 128" fill="#ffffff" stroke="#000000" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter">
+                <polygon points="64,16 112,40 64,64 16,40" />
+                <polyline points="16,64 64,88 112,64" fill="none" />
+                <polyline points="16,88 64,112 112,88" fill="none" />
+            </svg>
+            <span class="label">Isometric Tier</span>
+        </div>
+
+        <div class="icon-card" aria-label="View Block Note">
+            <svg viewBox="0 0 128 128" fill="#ffffff" stroke="#000000" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter">
+                <rect x="24" y="16" width="80" height="96" />
+                <rect x="40" y="32" width="48" height="24" fill="#000" />
+                <rect x="40" y="72" width="24" height="24" fill="none" />
+                <rect x="76" y="72" width="12" height="24" fill="#000" />
+            </svg>
+            <span class="label">Block Form</span>
+        </div>
+
+    </main>
+
+    <!-- FEATURE: Modal for detailed view and copy action -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content" id="modalContent">
+            <button class="close-btn" id="closeBtn">&times;</button>
+            <div id="modalSvgContainer"></div>
+            <button class="action-btn" id="copyBtn">Copy SVG Code</button>
+        </div>
+    </div>
+
+    <!-- FEATURE: Toast notification for user feedback -->
+    <div class="toast" id="toast">SVG Copied to Clipboard!</div>
+
+    <script>
+        const cards = document.querySelectorAll('.icon-card');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalSvgContainer = document.getElementById('modalSvgContainer');
+        const closeBtn = document.getElementById('closeBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const toast = document.getElementById('toast');
+        let currentSvgCode = '';
+
+        // Open modal
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const svgElement = card.querySelector('svg');
+                // Clone the SVG to put in the modal
+                const clonedSvg = svgElement.cloneNode(true);
+                modalSvgContainer.innerHTML = '';
+                modalSvgContainer.appendChild(clonedSvg);
+                
+                // Format the SVG string for copying
+                currentSvgCode = svgElement.outerHTML;
+                
+                modalOverlay.classList.add('active');
+            });
+        });
+
+        // Close modal function
+        const closeModal = () => {
+            modalOverlay.classList.remove('active');
+        };
+
+        closeBtn.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
+
+        // Copy SVG functionality
+        copyBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(currentSvgCode);
+                showToast();
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+                // Fallback for older browsers
+                const textArea = document.createElement("textarea");
+                textArea.value = currentSvgCode;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand("Copy");
+                textArea.remove();
+                showToast();
+            }
+        });
+
+        // Show toast notification
+        function showToast() {
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
