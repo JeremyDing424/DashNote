@@ -2,7 +2,9 @@
 const STORAGE_KEY = 'dashnote_list';
 const SETTINGS_KEY = 'dashnote_settings';
 const ONE_MB = 1024 * 1024;
+const LOCAL_STORAGE_FALLBACK_QUOTA_BYTES = 10 * ONE_MB;
 const STORAGE_USAGE_WARNING_THRESHOLD = 80;
+const TEMP_STORAGE_KEY_PATTERN = /^dashnote_(tmp|temp|cache|draft|session|backup)(_|$)/i;
 const DEFAULT_SETTINGS = {
   dateDisplay: 'updatedAt',
   sortOrder: 'desc',
@@ -162,17 +164,43 @@ async function saveNotes(notes) {
 }
 
 async function getStorageStats() {
-  const usedBytes = await chrome.storage.local.getBytesInUse(null);
+  const [usedBytes, notesBytes, settingsBytes] = await Promise.all([
+    chrome.storage.local.getBytesInUse(null),
+    chrome.storage.local.getBytesInUse(STORAGE_KEY),
+    chrome.storage.local.getBytesInUse(SETTINGS_KEY)
+  ]);
   const totalBytes = typeof chrome.storage?.local?.QUOTA_BYTES === 'number'
     ? chrome.storage.local.QUOTA_BYTES
-    : 5 * ONE_MB;
-  const percentage = totalBytes > 0 ? Math.min((usedBytes / totalBytes) * 100, 100) : 0;
+    : LOCAL_STORAGE_FALLBACK_QUOTA_BYTES;
+  const otherBytes = Math.max(usedBytes - notesBytes - settingsBytes, 0);
+  const percentage = totalBytes > 0
+    ? Math.min(Math.max((usedBytes / totalBytes) * 100, 0), 100)
+    : 0;
 
-  return { usedBytes, totalBytes, percentage };
+  return {
+    usedBytes,
+    totalBytes,
+    percentage,
+    breakdown: {
+      notesBytes,
+      settingsBytes,
+      otherBytes
+    }
+  };
 }
 
 function formatMb(bytes) {
   return `${(bytes / ONE_MB).toFixed(2)} MB`;
+}
+
+function formatBytesCompact(bytes) {
+  if (bytes >= ONE_MB) {
+    return `${(bytes / ONE_MB).toFixed(2)} MB`;
+  }
+  if (bytes >= 1024) {
+    return `${(bytes / 1024).toFixed(1)} KB`;
+  }
+  return `${bytes} B`;
 }
 
 async function updateStorageIndicator() {
@@ -187,7 +215,7 @@ async function updateStorageIndicator() {
   }
 
   try {
-    const { usedBytes, totalBytes, percentage } = await getStorageStats();
+    const { usedBytes, totalBytes, percentage, breakdown } = await getStorageStats();
     const roundedPercent = Math.round(percentage);
 
     percentEl.textContent = `${roundedPercent}%`;
@@ -195,6 +223,7 @@ async function updateStorageIndicator() {
     usedValueEl.textContent = formatMb(usedBytes);
     totalValueEl.textContent = `/ ${formatMb(totalBytes)}`;
     storageCard.classList.toggle('near-limit', percentage >= STORAGE_USAGE_WARNING_THRESHOLD);
+    storageCard.title = `Notes ${formatMb(breakdown.notesBytes)} | Settings ${formatMb(breakdown.settingsBytes)} | Other ${formatMb(breakdown.otherBytes)}`;
   } catch (error) {
     console.warn('Failed to update storage indicator:', error);
   }
@@ -234,19 +263,25 @@ async function optimizeStorageUsage() {
   btnOptimizeStorage.disabled = true;
 
   try {
+    const beforeStats = await getStorageStats();
     const data = await chrome.storage.local.get(null);
     const notes = Array.isArray(data[STORAGE_KEY]) ? data[STORAGE_KEY] : [];
     const now = Date.now();
 
-    const compactedNotes = notes.filter(note => (note?.content || '').trim().length > 0);
+    const compactedNotes = notes.filter(note => {
+      if (!note || typeof note !== 'object') return false;
+      return typeof note.content === 'string' && note.content.trim().length > 0;
+    });
     const notesChanged = compactedNotes.length !== notes.length;
 
-    const keysToRemove = [];
+    const keysToRemove = new Set();
     Object.entries(data).forEach(([key, value]) => {
       if (key === STORAGE_KEY || key === SETTINGS_KEY) return;
 
-      if (/^dashnote_(tmp|temp|cache|draft)/i.test(key)) {
-        keysToRemove.push(key);
+      if (!key.startsWith('dashnote_')) return;
+
+      if (TEMP_STORAGE_KEY_PATTERN.test(key)) {
+        keysToRemove.add(key);
         return;
       }
 
@@ -254,7 +289,7 @@ async function optimizeStorageUsage() {
       if (expiresAt) {
         const expiresAtMs = new Date(expiresAt).getTime();
         if (!Number.isNaN(expiresAtMs) && expiresAtMs <= now) {
-          keysToRemove.push(key);
+          keysToRemove.add(key);
         }
       }
     });
@@ -267,17 +302,26 @@ async function optimizeStorageUsage() {
       updateSelectedCount();
     }
 
-    if (keysToRemove.length > 0) {
-      await chrome.storage.local.remove(keysToRemove);
+    const removableKeys = Array.from(keysToRemove);
+    if (removableKeys.length > 0) {
+      await chrome.storage.local.remove(removableKeys);
     }
 
     await updateStorageIndicator();
 
-    const cleanedCount = (notes.length - compactedNotes.length) + keysToRemove.length;
+    const afterStats = await getStorageStats();
+    const reclaimedBytes = Math.max(beforeStats.usedBytes - afterStats.usedBytes, 0);
+    const cleanedCount = (notes.length - compactedNotes.length) + removableKeys.length;
     if (cleanedCount > 0) {
-      showToast(`Optimized ${cleanedCount} items`);
+      showToast(`Optimized ${cleanedCount} items, freed ${formatBytesCompact(reclaimedBytes)}`);
     } else {
       showToast('No cleanup needed');
+    }
+
+    if (afterStats.breakdown.otherBytes > 0) {
+      console.info(
+        `Storage includes non-note keys: ${formatBytesCompact(afterStats.breakdown.otherBytes)} under chrome.storage.local`
+      );
     }
   } catch (error) {
     console.error('Failed to optimize storage usage:', error);
