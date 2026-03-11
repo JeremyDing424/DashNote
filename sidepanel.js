@@ -25,7 +25,13 @@ const i18n = {
     downloadSelected: 'Download',
     searchPlaceholder: 'Search notes...',
     emptyStateText: 'No notes yet. Click the button below to create one.',
-    emptyNewNoteButton: 'New Note'
+    emptyNewNoteButton: 'New Note',
+    storageLabel: 'Local Sync Storage',
+    storageOptimize: 'OPTIMIZE',
+    storageCleaning: 'CLEANING...',
+    storageTitleNotes: 'Notes',
+    storageTitleSettings: 'Settings',
+    storageTitleOther: 'Other'
   },
   zh: {
     settingsTitle: '设置',
@@ -40,7 +46,13 @@ const i18n = {
     downloadSelected: '下载',
     searchPlaceholder: '搜索笔记...',
     emptyStateText: '还没有笔记，点击下方按钮开始创建',
-    emptyNewNoteButton: '新建笔记'
+    emptyNewNoteButton: '新建笔记',
+    storageLabel: '本地同步存储',
+    storageOptimize: '优化',
+    storageCleaning: '清理中...',
+    storageTitleNotes: '笔记',
+    storageTitleSettings: '设置',
+    storageTitleOther: '其他'
   }
 };
 
@@ -215,6 +227,7 @@ async function updateStorageIndicator() {
   }
 
   try {
+    const locale = i18n[settings.language] || i18n.en;
     const { usedBytes, totalBytes, percentage, breakdown } = await getStorageStats();
     const roundedPercent = Math.round(percentage);
 
@@ -223,7 +236,7 @@ async function updateStorageIndicator() {
     usedValueEl.textContent = formatMb(usedBytes);
     totalValueEl.textContent = `/ ${formatMb(totalBytes)}`;
     storageCard.classList.toggle('near-limit', percentage >= STORAGE_USAGE_WARNING_THRESHOLD);
-    storageCard.title = `Notes ${formatMb(breakdown.notesBytes)} | Settings ${formatMb(breakdown.settingsBytes)} | Other ${formatMb(breakdown.otherBytes)}`;
+    storageCard.title = `${locale.storageTitleNotes} ${formatMb(breakdown.notesBytes)} | ${locale.storageTitleSettings} ${formatMb(breakdown.settingsBytes)} | ${locale.storageTitleOther} ${formatMb(breakdown.otherBytes)}`;
   } catch (error) {
     console.warn('Failed to update storage indicator:', error);
   }
@@ -258,8 +271,8 @@ async function optimizeStorageUsage() {
   const btnOptimizeStorage = document.getElementById('btnOptimizeStorage');
   if (!btnOptimizeStorage) return;
 
-  const originalLabel = btnOptimizeStorage.textContent;
-  btnOptimizeStorage.textContent = 'CLEANING...';
+  const locale = i18n[settings.language] || i18n.en;
+  btnOptimizeStorage.textContent = locale.storageCleaning;
   btnOptimizeStorage.disabled = true;
 
   try {
@@ -327,7 +340,8 @@ async function optimizeStorageUsage() {
     console.error('Failed to optimize storage usage:', error);
     showToast('Optimize failed');
   } finally {
-    btnOptimizeStorage.textContent = originalLabel;
+    const finalLocale = i18n[settings.language] || i18n.en;
+    btnOptimizeStorage.textContent = finalLocale.storageOptimize;
     btnOptimizeStorage.disabled = false;
   }
 }
@@ -426,6 +440,18 @@ function applyLanguage(lang) {
 
   const btnDownloadSelected = document.getElementById('btnDownloadSelected');
   if (btnDownloadSelected) btnDownloadSelected.textContent = locale.downloadSelected;
+
+  const storageLabelText = document.getElementById('storageLabelText');
+  if (storageLabelText) storageLabelText.textContent = locale.storageLabel;
+
+  const btnOptimizeStorage = document.getElementById('btnOptimizeStorage');
+  if (btnOptimizeStorage) {
+    btnOptimizeStorage.textContent = btnOptimizeStorage.disabled
+      ? locale.storageCleaning
+      : locale.storageOptimize;
+  }
+
+  void updateStorageIndicator();
 }
 
 function sortNotesBySettings(notes) {
